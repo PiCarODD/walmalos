@@ -1,0 +1,170 @@
+<!-- 
+-*- coding: utf-8 -*-
+# @Author: HeinHtetAung
+# @Date:   2019-06-05 12:52:03
+# @Last modified by:   Hein Htet Aung
+# @Last Modified time: 2019-06-09 22:04:08
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+	<title>Welcome Seller</title>
+
+	<!-- Bootstrap -->
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+
+	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<nav class="nav">
+						<span class="h3">
+							Welcome User
+						</span>
+						<span class="pull-right">
+							<a href=""><span class="glyphicon glyphicon-cog names">Setting</span></a>
+							<a href="../shop/index.html"><span class="glyphicon glyphicon-log-out names">Logout</span></a>
+						</span>
+					</nav>
+				</div>
+				<div class="panel-body">
+					<div class="col-md-3 profile">
+						<div class="col-md-offset-3">
+							<img src="img/girl2.jpg" width="100px" height="100px" class="img img-circle" alt="">
+						</div>
+						<div class="names text-center">
+							<h4><u>Ma Thaung Nyunt</u></h4>
+							<div class="glyphicon glyphicon-home">Magway</div><br>
+							<div class="glyphicon glyphicon-phone">092321321</div><br>
+							<div class="glyphicon glyphicon-road">121,Street,Yangon</div>
+							<h3>Total Products On Sale</h3>
+							<small><u>123 items</u></small>
+							<h3>Total Order</h3>
+							<small><u>12 Orders</u></small>
+							<h3>Total Income</h3>
+							<small><u>12211313 MMK</u></small>
+						</div>
+					</div>
+					<div class="col-md-9">
+						<nav class="nav navbar-default navbar-static-top">
+							<button class="navbar-toggle" data-toggle="collapse" data-target="#one">
+								<span class="icon-bar"></span>
+								<span class="icon-bar"></span>
+								<span class="icon-bar"></span>
+							</button>
+							<div class="navbar-collapse collapse" id="one">
+								<ul class="nav navbar-nav">
+									<li><a href="profile.html">Total Orders</a></li>
+									<li><a href="products.html">Your Products</a></li>
+									<li class="active"><a class="btn" id="show">Sell Products</a></li>
+								</ul>
+							</div>
+						</nav>
+						<div class="modal" id="addproduct" tabindex="-1" data-backdrop="static" data-keyboard="false">
+							<div class="modal-dialog"><!-- use to modal-sm to pop small modal box -->
+								<div class="modal-content">
+									<div class="modal-header"> <!-- header format -->
+										<button class="close" data-dismiss="modal">&times;</button><!--data-dismiss=close -->
+										<h4 class="modal-title">Add Your Product</h4>
+									</div><!-- eoh -->
+									<div class="modal-body"> <!-- body format -->
+										<form class="well form-control-static">
+											<div class="form-group">
+												<label for="pn" class="control-label">Product Name</label>
+												<div class="input-group">
+													<span class="input-group-addon">*</span>
+													<input type="text" class="form-control" id="pn" name="">
+												</div>
+											</div>
+											<div class="form-group">
+												<label for="pn" class="control-label">Choose Category</label>
+												<div class="input-group">
+													<select class="form-group">
+														<option>Watches</option>
+														<option>Jewely</option>
+														<option>Cloths</option>
+														<option>Shoe</option>
+														<option>Handmades</option>
+														<option>Other</option>
+													</select>
+												</div>
+											</div>	
+											<div class="form-group">
+												<label for="pr" class="control-label">Price</label>
+												<div class="input-group">
+													<span class="input-group-addon">*</span>
+													<input type="number" class="form-control" id="pr" name="">
+												</div>
+											</div>
+											<div class="form-group">
+												<label for="qty" class="control-label">Qty</label>
+												<div class="input-group">
+													<span class="input-group-addon">*</span>
+													<input type="number" class="form-control" id="qty" name="">
+												</div>
+											</div>
+											<div class="form-group">
+												<label for="pi" class="control-label">Product Image</label>
+												<div class="input-group">
+													<span class="input-group-addon">*</span>
+													<input type="file" class="form-control" id="pi" name="">
+												</div>
+											</div>	
+											<div class="form-group">
+												<label for="qty" class="control-label">Seller Name</label>
+												<div class="input-group">
+													<span class="input-group-addon">*</span>
+													<input type="text" value="Maung Maung Zaw Latt" disabled="" class="form-control" id="qty" name="">
+												</div>
+											</div>
+											<br>
+											<div class="form-group">
+												<div class="input-group">
+													<div class="btn-group">
+														<input type="submit" value="Submit" class="form-control btn-success" id="pi" name="">
+													</div>
+													<div class="btn-group">
+														<input type="submit" value="Cancel" class="form-control btn-danger" id="pi" name="">
+													</div>
+												</div>
+											</div>
+										</form>	
+									</div> <!-- eob -->
+									<!-- eof -->
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="panel-footer">
+					<nav class="nav navbar-default navbar-fixed-bottom">
+						<p>Make with <span class="glyphicon glyphicon-heart"></span> Team <font color="#204A87FF">Bane Mont</font></p>
+					</nav>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+	<script src="js/jquery.min.js"></script>
+	<script>
+		$(document).ready(function() {
+			$('#addproduct').modal('show');
+		});
+	</script>
+	<!-- Include all compiled plugins (below), or include individual files as needed -->
+	<script src="js/bootstrap.min.js"></script>
+</body>
+</html>
