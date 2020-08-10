@@ -97,12 +97,12 @@
 								 	 $comment_date=$row['comment_date'];
 							?>
 							<tr>
-								<td><?php echo $comment_author; ?></td>
-								<td><?php echo $comment_email; ?></td>
-								<td><?php echo $comment_content; ?></td>
-								<td><?php echo $comment_status; ?></td>
-								<td><?php echo $comment_date; ?></td>
-								<td><a href="feedbacks.php?approved=<?php echo $comment_id; ?>" class="btn glyphicon glyphicon-ok"></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="feedbacks.php?unapproved=<?php echo $comment_id; ?>" class="btn glyphicon glyphicon-remove" href=""></a></td>
+								<td><?php echo htmlspecialchars($comment_author); ?></td>
+								<td><?php echo htmlspecialchars($comment_email); ?></td>
+								<td><?php echo htmlspecialchars($comment_content); ?></td>
+								<td><?php echo htmlspecialchars($comment_status); ?></td>
+								<td><?php echo htmlspecialchars($comment_date); ?></td>
+								<td><a href="feedbacks.php?approved=<?php echo htmlspecialchars($comment_id); ?>" class="btn glyphicon glyphicon-ok"></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="feedbacks.php?unapproved=<?php echo htmlspecialchars($comment_id); ?>" class="btn glyphicon glyphicon-remove" href=""></a></td>
 							</tr>
 						<?php } ?>
 						</tbody>
@@ -120,7 +120,7 @@
 </html>
 <?php
 	if(isset($_GET['approved'])){
-		$comment_id=$_GET['approved'];
+		$comment_id=mysqli_real_escape_string($con,$_GET['approved']);
 		$query="UPDATE comment SET comment_status='approved' WHERE comment_id=$comment_id";
 		$result=mysqli_query($con,$query);
 		header("location:feedbacks.php");
@@ -130,7 +130,7 @@
 
 <?php
 	if(isset($_GET['unapproved'])){
-		$comment_id=$_GET['unapproved'];
+		$comment_id=mysqli_real_escape_string($con,$_GET['unapproved']);
 		$query="DELETE FROM comment WHERE comment_id=$comment_id";
 		$result=mysqli_query($con,$query);
 		header("location:feedbacks.php");
