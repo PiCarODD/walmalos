@@ -1,5 +1,5 @@
-<?php include_once "include/header.php"; ?>
 <?php 
+include_once "include/header.php";
 if(isset($_POST['submit'])){
 	$username=$_POST['username'];
 	$password=$_POST['password'];
@@ -8,10 +8,19 @@ if(isset($_POST['submit'])){
 	$user_nrc=$_POST['user_nrc'];
 	$user_address=$_POST['user_address'];
 	$user_phone_no=$_POST['user_phone_no'];
-	$user_image=$_FILES['user_image']['name'];
-	$user_image_temp=$_FILES['user_image']['tmp_name'];
-	move_uploaded_file($user_image_temp,"images/$user_image");
-
+	$target_dir = "images/";
+	$target_file = $target_dir . basename($_FILES["user_image"]["name"]);
+	$imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+	$check = getimagesize($_FILES["user_image"]["tmp_name"]);
+	if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif" )
+	{
+	  echo "<script>alert(1);</script>";
+	  header("Location:register.php?imgerror");
+	  exit();
+	}
+	else{
+		move_uploaded_file($_FILES["user_image"]["tmp_name"], $target_file) ;
+	}
 	if($password===$c_password)
 	{
 		$username=mysqli_real_escape_string($con,$username);
@@ -165,7 +174,9 @@ Body Section
 								<u>Profile Image</u>
 							</div>
 						</div>
-						
+						<?php if(isset($_GET['imgerror'])){
+							echo "<p style='color:red'>Only images allowed...</p>";
+						} ?>
 						
 
 						<div class="control-group">
