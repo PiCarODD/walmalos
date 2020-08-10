@@ -49,7 +49,7 @@
                         </div>
 <?php
 	if(isset($_POST['btn_add'])){
-		$cat_title=$_POST['txt_add'];
+		$cat_title=mysqli_real_escape_string($con,$_POST['txt_add']);
 		if($cat_title==""){
 			echo "Sorry Retrype Category!!";
 		}else{
@@ -70,7 +70,8 @@
 
                         <?php
 	if(isset($_GET['edit'])){
-		$cat_id=$_GET['edit'];
+		$cat_id=mysqli_real_escape_string($con,$_GET['edit']);
+		$cat_id = (int) filter_var($cat_id, FILTER_SANITIZE_NUMBER_INT);
 		$query="SELECT * FROM category WHERE cat_id=$cat_id";
 		$result=mysqli_query($con,$query);
 		while($row=mysqli_fetch_assoc($result)){
@@ -88,7 +89,7 @@
 	 			
 	 		?>				<br><br>
 	 						<div class='input-group'>
-                            <input type="text" class="form-control" name="txt_edit" placeholder="<?php echo $cat_title;?>">
+                            <input type="text" class="form-control" name="txt_edit" placeholder="<?php echo htmlspecialchars($cat_title);?>">
                             <span class="input-group-btn">
                             <button class="btn btn-default" type="submit" name="btn_edit">
                                     <span class="glyphicon glyphicon-log-in"></span>
@@ -100,7 +101,7 @@
 	<?php
 	if(isset($_POST['btn_edit'])){
 		$cat_id;
-		$cat_title=$_POST['txt_edit'];
+		$cat_title=mysqli_real_escape_string($con,$_POST['txt_edit']);
 		if($cat_title==""){
 			echo "Type category name";
 		}else{
@@ -138,16 +139,16 @@
 								 $result=mysqli_query($con,$query);
 								 while($row=mysqli_fetch_assoc($result))
 								 {
-								 	$cat_id=$row['cat_id'];
-								 	$cat_title=$row['cat_title'];
+								 	$cat_id=htmlspecialchars($row['cat_id']);
+								 	$cat_title=htmlspecialchars($row['cat_title']);
 
 							?>
 							<tr>
-						        <td><?php echo $cat_id; ?></td>
-						        <td><?php echo $cat_title; ?></td>
+						        <td><?php echo htmlspecialchars($cat_id); ?></td>
+						        <td><?php echo htmlspecialchars($cat_title); ?></td>
 						        <td>
-						        	<a href="category.php?edit=<?php echo $cat_id?>" class="btn glyphicon glyphicon-edit"></a>
-						        	<a href="category.php?delete=<?php echo $cat_id?>" class="btn glyphicon glyphicon-trash"></a>
+						        	<a href="category.php?edit=<?php echo htmlspecialchars($cat_id); ?>" class="btn glyphicon glyphicon-edit"></a>
+						        	<a href="category.php?delete=<?php echo htmlspecialchars($cat_id);?>" class="btn glyphicon glyphicon-trash"></a>
 						        </td>
 						    </tr>
 						<?php } ?>
@@ -174,7 +175,7 @@
 
 <?php
 	if(isset($_GET['delete'])){
-		$cat_id=$_GET['delete'];
+		$cat_id=mysqli_real_escape_string($con,$_GET['delete']);
 		$query="DELETE FROM category WHERE cat_id=$cat_id";
 		$result=mysqli_query($con,$query);
 		header("location:category.php");
