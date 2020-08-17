@@ -8,8 +8,8 @@
 ![Seller Pannel](https://github.com/PiCarODD/walmalos/blob/master/walmalpoc/total_order.PNG)
 
 **Flow charts**
-![admin](https://github.com/PiCarODD/walmalos/blob/master/walmalpoc/admin_flowchart.PNG)
-![user](https://github.com/PiCarODD/walmalos/blob/master/walmalpoc/flowchart.PNG)
+![admin](https://github.com/PiCarODD/walmalos/blob/master/walmalpoc/admin_flowchart.png)
+![user](https://github.com/PiCarODD/walmalos/blob/master/walmalpoc/flowchart.png)
 
 
 [Twitter](https://twitter.com/picaro_o)
