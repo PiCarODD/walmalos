@@ -42,6 +42,7 @@ Body Section
         if(isset($_GET['cart_product_id']))
         {
           $cart_product_id=$_GET['cart_product_id'];
+          htmlspecialchars($cart_product_id);
           add_to_cart($cart_product_id);
           
         }
@@ -59,8 +60,8 @@ Body Section
       <?php
         if (isset($_GET['add'])) 
         {
-          $key=$_GET['add'];
-          $add_product_id=$_GET['id'];
+          $key=htmlspecialchars($_GET['add']);
+          $add_product_id=htmlspecialchars($_GET['id']);
           qty_plus($add_product_id,$key);
 
           header("Location:cart_view.php");
@@ -68,7 +69,7 @@ Body Section
         }
         if (isset($_GET['remove'])) 
         {
-          $key=$_GET['remove'];
+          $key=htmlspecialchars($_GET['remove']);
           if($_SESSION['qty'][$key] > 1)
           {
             $_SESSION['qty'][$key]-=1;
@@ -82,7 +83,7 @@ Body Section
       <?php 
           if (isset($_GET['delete'])) 
           {
-              $key=$_GET['delete'];
+              $key=htmlspecialchars($_GET['delete']);
               unset($_SESSION['cart_product_array'][$key]);
               //unset($_SESSION['qty'][$key]);
               // $delete_product_id=$_GET['delete'];
@@ -119,25 +120,27 @@ Body Section
               $customer_email=$_POST['email'];
               $customer_phone=$_POST['phone'];
               $customer_address=$_POST['address'];
-
-              $insert_query="INSERT INTO customer(customer_name, customer_phone_no, customer_email, customer_address) VALUES ('$customer_name', '$customer_phone', '$customer_email', '$customer_address')";
-              $insert_result=mysqli_query($con,$insert_query);
+              $stmt=$con->prepare("INSERT INTO customer(customer_name, customer_phone_no, customer_email, customer_address) VALUES (?, ?, ?, ?)");
+              $stmt->bind_param("ssss",$customer_name,$customer_phone,$customer_email,$customer_address);
+              $stmt->execute();
+              $insert_result = $stmt->get_result();
               if (!$insert_result) 
               {
                 die("Insert customer fail".mysqli_error($insert_result));
               }
-
-              $select_query="SELECT * FROM customer WHERE customer_phone_no='$customer_phone' AND customer_email='$customer_email'";
-              $select_result=mysqli_query($con,$select_query);
+              $stmt=$con->prepare("SELECT * FROM customer WHERE customer_phone_no=? AND customer_email=?");
+              $stmt->bind_param("ss",$customer_phone,$customer_address);
+              $stmt->execute();
+              $select_result= $stmt->get_result();
               if (!$select_result) 
               {
                 die("Insert customer fail".mysqli_error($select_result));
               }
-              while ($select_row=mysqli_fetch_assoc($select_result)) 
+              while ($select_row=$select_result->fetch_assoc()) 
               {
                 $customer_id=$select_row['customer_id'];
               }
-              echo $customer_id;
+              echo htmlspecialchars($customer_id);
               add_to_cart_table($customer_id);
 
             }

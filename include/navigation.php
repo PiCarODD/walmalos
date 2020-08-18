@@ -25,14 +25,14 @@
 						//include_once "login_check.php";
 
 						?>
-						<a href="../ecommerce/login_check.php?user_role=<?php echo $user_role ?>"><span class="icon-user"></span>My Account </a>
+						<a href="login_check.php?user_role=<?php echo $user_role ?>"><span class="icon-user"></span>My Account </a>
 						<?php
 						
 					}
 					else
 					{
 						?>
-						<a href="../ecommerce/login_check.php?user_role=<?php echo 'null' ?>"><span class="icon-user"></span>My Account </a>				
+						<a href="login_check.php?user_role=<?php echo 'null' ?>"><span class="icon-user"></span>My Account </a>				
 						<?php
 					}
 				 ?>

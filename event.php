@@ -12,10 +12,11 @@ Body Section
 		</ul>
 
 		<?php 
-		$query="SELECT * FROM event";
-		$result=mysqli_query($con,$query);
+		$query=$con->prepare("SELECT * FROM event");
+		$query->execute();
+		$result=$query->get_result();
 
-		while ($row=mysqli_fetch_assoc($result)) {
+		while ($row=$result->fetch_assoc()) {
 			$event_id=$row['event_id'];
 			$event_name=$row['event_name'];
 			$location=$row['location'];
@@ -29,11 +30,11 @@ Body Section
 			<div class="row-fluid">
 				<div class="well well-small col-md-12">
 					<div class="col-md-6">
-						<h1 style="text-transform: uppercase;"><?php echo $event_name; ?></h1>	
+						<h1 style="text-transform: uppercase;"><?php echo htmlspecialchars($event_name); ?></h1>	
 						<p class="border-radius">
-							<img src="./assets/img/eventloc.jpg" width="20%" height="20%" alt=""><?php echo $location; ?><br>
-							<img src="./assets/img/datecal.png" width="20%" height="20%" alt=""><?php echo $start_date; ?> to <?php echo $end_date; ?><br>
-							<img src="./assets/img/dicount.png" width="20%" height="20%" alt=""><?php echo $description; ?><br>
+							<img src="./assets/img/eventloc.jpg" width="20%" height="20%" alt=""><?php echo htmlspecialchars($location); ?><br>
+							<img src="./assets/img/datecal.png" width="20%" height="20%" alt=""><?php echo htmlspecialchars($start_date); ?> to <?php echo htmlspecialchars($end_date); ?><br>
+							<img src="./assets/img/dicount.png" width="20%" height="20%" alt=""><?php echo htmlspecialchars($description); ?><br>
 						</p>
 					</div>
 					<div class="col-md-6">

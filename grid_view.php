@@ -17,10 +17,11 @@ New Products
 <ul class="thumbnails" style="list-style-type: none;">
 		<?php 
 
-		$query="SELECT * FROM product WHERE product_status='approved'";
-		$result=mysqli_query($con,$query);
+		$query=$con->prepare("SELECT * FROM product WHERE product_status='approved'");
+		$query->execute();
+		$result=$query->get_result();
 
-		while ($row=mysqli_fetch_assoc($result)) {
+		while ($row=$result->fetch_assoc()) {
 			$product_cat_id=$row['product_cat_id'];
 			$product_id=$row['product_id'];
 			$product_image=$row['product_image'];
@@ -33,13 +34,13 @@ New Products
 				<li class="col-md-4">
 					<div class="thumbnail">
 						<a href="product_details.html" class="overlay"></a>
-						<a class="zoomTool" href="product_details.php?productd=<?php echo $product_id ?>" title="add to cart"><span class="icon-search"></span> QUICK VIEW</a>
-						<a href="product_details.php?productd=<?php echo $product_id ?>"><img src="images/<?php echo $product_image; ?>" alt=""></a>
+						<a class="zoomTool" href="product_details.php?productd=<?php echo htmlspecialchars($product_id); ?>" title="add to cart"><span class="icon-search"></span> QUICK VIEW</a>
+						<a href="product_details.php?productd=<?php echo $product_id ?>"><img src="images/<?php echo htmlspecialchars($product_image); ?>" alt=""></a>
 						<div class="caption cntr">
-							<p><?php echo $product_title; ?></p>
-							<p><strong> $ <?php echo $product_price; ?></strong></p>
+							<p><?php echo htmlspecialchars($product_title); ?></p>
+							<p><strong> $ <?php echo htmlspecialchars($product_price); ?></strong></p>
 							<!-- <h4><a class="shopBtn" href="grid_view.php ? cart=<?php echo $product_id; ?>" title="add to cart"> Add to cart </a></h4> -->
-							<h4><a class="shopBtn" href="cart_view.php?cart_product_id=<?php echo $product_id ?>" title="add to cart"> Add to cart </a></h4>
+							<h4><a class="shopBtn" href="cart_view.php?cart_product_id=<?php echo htmlspecialchars($product_id); ?>" title="add to cart"> Add to cart </a></h4>
 							<br class="clr">
 						</div>
 					</div>

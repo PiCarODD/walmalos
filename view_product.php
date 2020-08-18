@@ -18,27 +18,26 @@ New Products
 					if (isset($_GET['cat_id'])) {
 						$cat_id=$_GET['cat_id'];
 					}
-					$query="SELECT * FROM product WHERE product_cat_id=$cat_id AND product_status='approved' LIMIT 3";
-					$result=mysqli_query($con,$query);
-
-					while ($row=mysqli_fetch_assoc($result)) {
+					$stmt=$con->prepare("SELECT * FROM product WHERE product_cat_id=? AND product_status='approved' LIMIT 3");
+					$stmt->bind_param("s",$cat_id);
+					$stmt->execute();
+					$result=$stmt->get_result();
+					while ($row=$result->fetch_assoc()) {
 						$product_id=$row['product_id'];
 						$product_image=$row['product_image'];
 						$product_title=$row['product_title'];
-						$product_price=$row['product_price'];
-						
-					
+						$product_price=$row['product_price'];	
 				 ?>
 				 <li class="col-md-4">
 				<div class="thumbnail">
-					<a href="product_details.php=<?php echo $product_id ?>" class="overlay"></a>
-					<a class="zoomTool" href="product_details.php?productd=<?php echo $product_id ?>" title="add to cart"><span class="icon-search"></span> QUICK VIEW</a>
-					<a href="product_details.php?productd=<?php echo $product_id ?>"><img class="img-responsive"  style="height: 250px;" src="images/<?php echo $product_image; ?>" alt=""></a>
+					<a href="product_details.php=<?php echo htmlspecialchars($product_id); ?>" class="overlay"></a>
+					<a class="zoomTool" href="product_details.php?productd=<?php echo htmlspecialchars($product_id) ?>" title="add to cart"><span class="icon-search"></span> QUICK VIEW</a>
+					<a href="product_details.php?productd=<?php echo htmlspecialchars($product_id); ?>"><img class="img-responsive"  style="height: 250px;" src="images/<?php echo htmlspecialchars($product_image); ?>" alt=""></a>
 					<div class="caption cntr">
-						<p><?php echo $product_title; ?></p>
-						<p><strong> <?php echo $product_price; ?></strong></p>
+						<p><?php echo htmlspecialchars($product_title); ?></p>
+						<p><strong> <?php echo htmlspecialchars($product_price); ?></strong></p>
 						<!-- <h4><a class="shopBtn" href="view_product.php?cart=<?php echo $product_id; ?>" title="add to cart"> Add to cart </a></h4> -->
-						<h4><a class="shopBtn" href="cart_view.php?cart_product_id=<?php echo $product_id ?>" title="add to cart"> Add to cart </a></h4>
+						<h4><a class="shopBtn" href="cart_view.php?cart_product_id=<?php echo htmlspecialchars($product_id); ?>" title="add to cart"> Add to cart </a></h4>
 						
 						<br class="clr">
 					</div>

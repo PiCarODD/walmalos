@@ -4,35 +4,43 @@
         global $con;
         foreach ($_SESSION['cart_product_array'] as $key => $value) 
         {
-          echo $value;
+            echo $value;
             $qty=$_SESSION['qty'][$key];
             $total=$_SESSION['total'][$key];
-            $cart_query="INSERT INTO cart(cart_product_id, cart_customer_id, cart_date, cart_qty, cart_total_price) VALUES ($value, $customer_id, now(), $qty, $total)";
-            $cart_result=mysqli_query($con,$cart_query);
+            $cart_query=$con->prepare("INSERT INTO cart(cart_product_id, cart_customer_id, cart_date, cart_qty, cart_total_price) VALUES (?, ?, now(), ?, ?)");
+            $cart_query->bind_param("ssss",$value,$customer_id,$qty,$total);
+            $cart_query->execute();
+            $cart_result=$cart_query->get_result();
             if (!$cart_result) 
             {
-              die("Insert customer fail".mysqli_error($cart_result));
+              die("Insert customer fail");
             }
-            $product_query="SELECT * FROM product WHERE product_id=$value";
-            $product_result=mysqli_query($con,$product_query);
-            $product_row=mysqli_fetch_assoc($product_result);
+            $product_query=$con->prepare("SELECT * FROM product WHERE product_id=?");
+            $product_query->bind_param("s",$value);
+            $product_query->execute();
+            $product_result=$product_query->get_result();
+            $product_row=$product_result->fetch_assoc();
             $product_qty=$product_row['product_qty'];
 
             if(($product_qty-$qty)>=0)
             {
-                $remove_qty_query="UPDATE product SET product_qty=product_qty-$qty WHERE product_id=$value";
-                $remove_qty_result=mysqli_query($con,$remove_qty_query);
+                $remove_qty_query=$con->prepare("UPDATE product SET product_qty=product_qty-$qty WHERE product_id=?");
+                $remove_qty_query->bind_param("s",$value);
+                $remove_qty_query->execute();
+                $remove_qty_result=$remove_qty_query->get_result();
                 if (!$remove_qty_result) 
                 {
-                  die("Insert customer fail".mysqli_error($remove_qty_result));
+                  die("Insert customer fail");
                 }
                 if(($product_qty-$qty)==0)
                 {
-                  $product_delete_query="DELETE FROM product WHERE product_id=$value";
-                  $product_delete_result=mysqli_query($con,$product_delete_query);
+                  $product_delete_query=$con->prepare("DELETE FROM product WHERE product_id=?");
+                  $product_delete_query -> bind_param("s",$value);
+                  $product_delete_query->execute();
+                  $product_delete_result=$product_delete_query->get_result();
                   if (!$product_delete_result) 
                   {
-                    die("Insert customer fail".mysqli_error($product_delete_result));
+                    die("Insert customer fail");
                   }
                   unset($_SESSION['cart_product_array'][$key]);
                   header("Location:cart_view.php");

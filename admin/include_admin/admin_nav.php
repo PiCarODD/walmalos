@@ -32,10 +32,10 @@
 									<a data-toggle="dropdown" class="dropdown-toggle" href="#"><span class="glyphicon glyphicon-user"></span><b class="caret"></b></a>
 									<ul class="dropdown-menu">
 										<li>
-											<span class="glyphicon glyphicon-home"><a href="../../ecommerce/index.php">Home</a></span>
+											<span class="glyphicon glyphicon-home"><a href="../index.php">Home</a></span>
 										</li>
 										<li>
-											<span class="glyphicon glyphicon-log-out"><a href="../../ecommerce/logout.php">Logout</a></span>
+											<span class="glyphicon glyphicon-log-out"><a href="../logout.php">Logout</a></span>
 										</li>
 									</ul>
 								</li>

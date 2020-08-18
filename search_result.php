@@ -12,12 +12,15 @@ Body Section
 	<?php 
 		if(isset($_POST['btnsearch'])){
 			 $txtsearch=$_POST['txtsearch'];
-			 $query="SELECT * FROM product
+			 mysqli_escape_string($con,$txtsearch);
+			 $query=$con->prepare("SELECT * FROM product
 			  WHERE product_status='approved' 
-			  AND product_title RLIKE '$txtsearch'";
-		$result=mysqli_query($con,$query);
-		echo " <h3>Search Result of &nbsp;&nbsp;&nbsp; '{$txtsearch}'</h3>";
-		while ($row=mysqli_fetch_assoc($result)) {
+			  AND product_title RLIKE ?");
+			 $query->bind_param("s",$txtsearch);
+			 $query->execute();
+		$result=$query->get_result();
+		echo " <h3>Search Result of &nbsp;&nbsp;&nbsp; '".htmlspecialchars($txtsearch)."'</h3>";
+		while ($result != False && $row=$result->fetch_assoc()) {
 			
 			$product_cat_id=$row['product_cat_id'];
 			$product_id=$row['product_id'];
@@ -30,15 +33,15 @@ Body Section
 	 	<div class="row-fluid">	
 	 	<div class="col-md-12 well">
 		<div class="col-md-4">
-			<img src="images/<?php echo $product_image; ?>" width="200px" height="200px" alt="">
+			<img src="images/<?php echo htmlspecialchars($product_image); ?>" width="200px" height="200px" alt="">
 		</div>
 		<div class="col-md-4">
-			<h5><?php echo $product_title; ?></h5>
-			<p><?php echo $product_content; ?></p>
+			<h5><?php echo htmlspecialchars($product_title); ?></h5>
+			<p><?php echo htmlspecialchars($product_content); ?></p>
 		</div>
 		<div class="col-md-4 alignR">
 		<form class="form-horizontal qtyFrm">
-			<h3>$<?php echo $product_price; ?></h3>
+			<h3>$<?php echo htmlspecialchars($product_price); ?></h3>
 		 		<div class="btn-group">
 				;
 		  			<a href="list_view.php?cart_product_id=<?php echo $product_id ?>" class="defaultBtn"><span class=" icon-shopping-cart"></span> Add to cart</a>

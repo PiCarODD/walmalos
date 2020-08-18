@@ -8,17 +8,18 @@ if(isset($_POST['submit'])){
 	$user_nrc=$_POST['user_nrc'];
 	$user_address=$_POST['user_address'];
 	$user_phone_no=$_POST['user_phone_no'];
-	$target_dir = "images/";
+	$target_dir = "userimgs/";
 	$target_file = $target_dir . basename($_FILES["user_image"]["name"]);
 	$imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
 	$check = getimagesize($_FILES["user_image"]["tmp_name"]);
 	if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif" )
 	{
-	  echo "<script>alert(1);</script>";
 	  header("Location:register.php?imgerror");
 	  exit();
 	}
 	else{
+		$bytes = random_bytes(20);
+		$target_file = bin2hex($bytes)+".png";
 		move_uploaded_file($_FILES["user_image"]["tmp_name"], $target_file) ;
 	}
 	if($password===$c_password)
@@ -32,11 +33,13 @@ if(isset($_POST['submit'])){
 		$password=mysqli_real_escape_string($con,$password);
 		// $password=password_hash($password,PASSWORD_BCRYPT,array('cost'=>10));
 
-		$query = "SELECT * FROM user WHERE user_email='$email'";
-		$result = mysqli_query($con,$query);
+		$query = $con->prepare("SELECT * FROM user WHERE user_email=?");
+		$query->bind_param("s",$email);
+		$query->execute();
+		$result = $query->get_result();
 		if(!$result)
 		{
-			die("Query failed" . mysqli_error($result));
+			die("Huh?");
 		}
 		if(mysqli_num_rows($result)>0)
 		{
@@ -45,12 +48,13 @@ if(isset($_POST['submit'])){
 		else
 		{
 			$password=password_hash($password,PASSWORD_BCRYPT,array('cost'=>10));
-			$query="INSERT INTO user(username, user_password, user_email, user_image, user_role, user_nrc, user_phone_no, user_address) VALUES ('$username','$password','$email', '$user_image', 'subscriber','$user_nrc','$user_phone_no','$user_address')";
-			$result=mysqli_query($con,$query);
+			$query=$con->prepare("INSERT INTO user(username, user_password, user_email, user_image, user_role, user_nrc, user_phone_no, user_address) VALUES ('$username','$password','$email', '$user_image', 'subscriber','$user_nrc','$user_phone_no','$user_address')");
+			$query->bind_param("ssssssss",$username,$password,$email,$target_file,$subscriber,$user_nrc,$user_phone_no,$user_address);
+			$result=$query->get_result();
 			header("Location:register.php?success");
 			if(!$result)
 			{
-				die("Query Failed" . mysqli_error($result));
+				die("Hun?");
 			}
 			//header("Location:register.php?success");
 		}

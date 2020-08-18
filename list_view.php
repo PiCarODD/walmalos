@@ -11,10 +11,11 @@ Body Section
 <div class="well well-small">
 	<?php 
 		
-		$query="SELECT * FROM product WHERE product_status='approved'";
-		$result=mysqli_query($con,$query);
+		$query=$con->prepare("SELECT * FROM product WHERE product_status='approved'");
+		$query->execute();
+		$result=$query->get_result();
 
-		while ($row=mysqli_fetch_assoc($result)) {
+		while ($row=$result->fetch_assoc()) {
 			$product_cat_id=$row['product_cat_id'];
 			$product_id=$row['product_id'];
 			$product_image=$row['product_image'];
@@ -26,12 +27,12 @@ Body Section
 	<div class="row">	
 	 
 		<div class="col-md-3">
-			<img src="images/<?php echo $product_image; ?>" width="150px" alt="">
+			<img src="images/<?php echo htmlspecialchars($product_image); ?>" width="150px" alt="">
 		</div>
 		<div class="col-md-5">
-			<h5><?php echo $product_title; ?></h5>
+			<h5><?php echo htmlspecialchars($product_title); ?></h5>
 			<p>
-			<?php echo $product_content; ?>
+			<?php echo htmlspecialchars($product_content); ?>
 			</p>
 		</div>
 		<div class="col-md-4 alignR">
@@ -41,8 +42,8 @@ Body Section
 			<input type="checkbox">  Adds product to compair
 		</label><br> -->
 		<div class="btn-group">
-		  <a href="cart_view.php?cart_product_id=<?php echo $product_id ?>" class="defaultBtn"><span class=" icon-shopping-cart"></span> Add to cart</a>
-		  <a href="product_details.php?productd=<?php echo $product_id ?>" class="shopBtn">VIEW</a>
+		  <a href="cart_view.php?cart_product_id=<?php echo htmlspecialchars($product_id); ?>" class="defaultBtn"><span class=" icon-shopping-cart"></span> Add to cart</a>
+		  <a href="product_details.php?productd=<?php echo htmlspecialchars($product_id); ?>" class="shopBtn">VIEW</a>
 		 </div>
 			</form>
 		</div>

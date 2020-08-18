@@ -1,15 +1,30 @@
 ## WalMal Online Shop
 
-**Main Index Page**
 ![Index Page](https://github.com/PiCarODD/walmalos/blob/master/walmalpoc/main.PNG)
-**Admin Pannel**
+* Fig : Main Index Page*
+
 ![Admin Pannel](https://github.com/PiCarODD/walmalos/blob/master/walmalpoc/cms_category.PNG)
-**Seller Pannel**
+* Fig : Admin Pannel*
+
 ![Seller Pannel](https://github.com/PiCarODD/walmalos/blob/master/walmalpoc/total_order.PNG)
+* Fig : Seller Pannel*
 
 ## Flow charts
 ![admin](https://github.com/PiCarODD/walmalos/blob/master/walmalpoc/admin_flowchart.png)
 ![user](https://github.com/PiCarODD/walmalos/blob/master/walmalpoc/flowchart.png)
+
+## Credentials
+Administrator - admin@walmal.pos/admin
+Seller - seller@walmal.pos/seller
+
+## Road Map
+- [x] Release initial version
+- [ ] Add more popular language
+- [ ] Change cart.php without loading
+- [ ] DockerFile
+- [ ] Improve UI/UX
+- [ ] Secure Everythings
+- [ ] Add secure function for all control
 
 ## Credits
 I want to say thanks to **Green Hacker Institue** for letting us to join internship program and help us on projects direction until finished.I also want to say thanks to all of my teammates for contributing this project. 

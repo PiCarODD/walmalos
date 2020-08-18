@@ -58,26 +58,30 @@
 									$user_id=$_SESSION['user_id'];
 									$username=$_SESSION['username'];
 
-									$query="SELECT * FROM product WHERE product_seller_id=$user_id";
-									$result=mysqli_query($con,$query);
+									$query=$con->prepare("SELECT * FROM product WHERE product_seller_id=?");
+									$query->bind_param("s",$user_id);
+									$query->execute();
+									$result=$query->get_result();
 									if(!$result)
 									{
-										die("Query failed" . mysqli_error($result));
+										die("Huh?");
 									}
 
 									
-									while ($product_row=mysqli_fetch_assoc($result)) 
+									while ($product_row=$result->fetch_assoc()) 
 									{
 										$product_id=$product_row['product_id'];
 										$product_title=$product_row['product_title'];
-										$query="SELECT * FROM cart WHERE cart_product_id=$product_id ORDER BY cart_id DESC";
-										$cart_result=mysqli_query($con,$query);
+										$query=$con->prepare("SELECT * FROM cart WHERE cart_product_id=? ORDER BY cart_id DESC");
+										$query->bind_param("s",$product_id);
+										$query->execute();
+										$cart_result=$query->get_result();
 										if(!$cart_result)
 										{
-											die("Query failed" . mysqli_error($cart_result));
+											die("Huh?");
 										}
 
-										while ($row=mysqli_fetch_assoc($cart_result)) 
+										while ($row=$cart_result->fetch_assoc()) 
 										{
 
 											$people_count+=1;
@@ -86,14 +90,16 @@
 											$cart_date=$row['cart_date'];
 											$cart_total_price=$row['cart_total_price'];
 											$customer_id=$row['cart_customer_id'];
-											$customer_query="SELECT * FROM customer WHERE customer_id=$customer_id";
-											$customer_result=mysqli_query($con,$customer_query);
+											$customer_query=$con->prepare("SELECT * FROM customer WHERE customer_id=$customer_id");
+											$customer_query-> bind_param("s",$customer_id);
+											$customer_query->execute();
+											$customer_result=$customer_query->get_result();
 											if(!$customer_result)
 											{
-												die("Query failed" . mysqli_error($customer_result));
+												die("Huh?");
 											}
 
-											while ($customer_row=mysqli_fetch_assoc($customer_result))
+											while ($customer_row=$customer_result->fetch_assoc())
 											{
 												$customer_name=$customer_row['customer_name'];
 												$customer_phone_no=$customer_row['customer_phone_no'];
@@ -102,14 +108,14 @@
 
 												?>
 												<tr>
-													<td><?php echo $people_count ?></td>
-													<td>Product name <b><?php echo $product_title ?></b> by <b><?php echo $customer_name ?></b></td>
-													<td><?php echo $item_qty ?> Items</td>
-													<td><?php echo $customer_phone_no ?></td>
-													<td><a href="mailto:<?php echo $customer_email ?>?Subject=Order Confirm"><?php echo $customer_email ?></a></td>
-													<td><?php echo $customer_address ?></td>
-													<td><?php echo $cart_date ?></td>
-													<td><?php echo $cart_total_price ?> MMK</td>
+													<td><?php echo htmlspecialchars($people_count) ?></td>
+													<td>Product name <b><?php echo htmlspecialchars($product_title) ?></b> by <b><?php echo htmlspecialchars($customer_name); ?></b></td>
+													<td><?php echo htmlspecialchars($item_qty) ?> Items</td>
+													<td><?php echo htmlspecialchars($customer_phone_no) ?></td>
+													<td><a href="mailto:<?php echo htmlspecialchars($customer_email); ?>?Subject=Order Confirm"><?php echo htmlspecialchars($customer_email); ?></a></td>
+													<td><?php echo htmlspecialchars($customer_address); ?></td>
+													<td><?php echo htmlspecialchars($cart_date); ?></td>
+													<td><?php echo htmlspecialchars($cart_total_price) ?> MMK</td>
 													<td>KBZ</td>
 													<!-- <td><p class="successcolor">Delivered</p></td> -->
 													<td>
@@ -120,8 +126,8 @@
 														</select>
 													</td>
 													<td>
-														<a href="orders.php?confirm=<?php echo $cart_id ?>" class="btn glyphicon glyphicon-ok"></a>
-														<a href="orders.php?cart_id=<?php echo $cart_id ?>" class="btn glyphicon glyphicon-trash"></a>
+														<a href="orders.php?confirm=<?php echo htmlspecialchars($cart_id); ?>" class="btn glyphicon glyphicon-ok"></a>
+														<a href="orders.php?cart_id=<?php echo htmlspecialchars($cart_id); ?>" class="btn glyphicon glyphicon-trash"></a>
 													</td>
 												</tr>
 
@@ -137,11 +143,13 @@
 								 	if(isset($_GET['cart_id']))
 								 	{
 								 		$cart_id=$_GET['cart_id'];
-								 		$delete_query="DELETE FROM cart WHERE cart_id=$cart_id";
-								 		$delete_result=mysqli_query($con,$delete_query);
+								 		$delete_query=$con->prepare("DELETE FROM cart WHERE cart_id=?");
+								 		$delete_query->bind_param("s",$cart_id);
+								 		$delete_query->execute();
+								 		$delete_result=$delete_query->get_result();
 								 		if(!$delete_result)
 								 		{
-								 			die("Delete fail".mysqli_error($delete_result));
+								 			die("Huh?");
 								 		}
 								 		header("Location:orders.php");
 								 	}

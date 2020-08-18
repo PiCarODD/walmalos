@@ -60,10 +60,11 @@ New Products
 					<div class="item active">
 						<ul class="thumbnails" style="list-style: none;">
 							<?php 
-							$query="SELECT * FROM product ORDER BY product_id DESC LIMIT 12";
-							$result=mysqli_query($con,$query);
+							$stmt = $con->prepare("SELECT * FROM product ORDER BY product_id DESC LIMIT 12");
+							$stmt -> execute();
+							$result = $stmt->get_result();
 
-							while ($row=mysqli_fetch_assoc($result)) {
+							while ($row = $result->fetch_assoc()) {
 								$product_cat_id=$row['product_cat_id'];
 								$product_id=$row['product_id'];
 								$product_image=$row['product_image'];
@@ -75,9 +76,9 @@ New Products
 								?>
 								<li class="col-md-3">
 									<div class="thumbnail" >
-										<a class="zoomTool" href="product_details.php?productd=<?php echo $product_id; ?>" title="add to cart"><span class="icon-search"></span> QUICK VIEW</a>
+										<a class="zoomTool" href="product_details.php?productd=<?php echo htmlspecialchars($product_id); ?>" title="add to cart"><span class="icon-search"></span> QUICK VIEW</a>
 										<a href="#" class="tag"></a>
-										<a href="product_details.php?productd=<?php echo $product_id; ?>"><img src="images/<?php echo $product_image; ?>" alt="bootstrap-ring" style="height: 200px;"></a>
+										<a href="product_details.php?productd=<?php echo htmlspecialchars($product_id); ?>"><img src="images/<?php echo $product_image; ?>" alt="bootstrap-ring" style="height: 200px;"></a>
 									</div>
 								</li>
 							<?php } ?>

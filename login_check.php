@@ -1,7 +1,9 @@
 <?php include_once "include/header.php"; ?>
 <?php session_start(); ?>
 <?php ob_start() ?>
-<?php 
+<?php  
+
+//serialize lote yan
 		if(isset($_GET['user_role']))
 		{
 			if($_GET['user_role']=='seller')
@@ -28,12 +30,14 @@
 			$password = mysqli_real_escape_string($con,$password);
 			
 
-			$query = "SELECT * FROM user WHERE user_email='$email'";
-			$result = mysqli_query($con,$query);
+			$query = $con->prepare("SELECT * FROM user WHERE user_email=?");
+			$query->bind_param("s",$email);
+			$query->execute();
+			$result = $query->get_result();
 			if(!$result){
-				die("Query failed" . mysqli_error($result));
+				die("Query failed");
 			}
-			while ($row=mysqli_fetch_assoc($result)) {
+			while ($row=$result->fetch_assoc()) {
 				$db_id = $row['user_id'];
 				$db_username=$row['username'];
 				$db_address=$row['user_address'];

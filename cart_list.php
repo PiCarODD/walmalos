@@ -31,13 +31,15 @@
 	function qty_plus($cart_product_id,$key)
 	{
 		global $con;
-		$query="SELECT * FROM product WHERE product_id=$cart_product_id";
-		$result=mysqli_query($con,$query);
+		$stmt = $con->prepare("SELECT * FROM product WHERE product_id=?");
+		$stmt->bind_param("s",$cart_product_id);
+		$stmt->execute();
+		$result=$stmt->get_result();
 		if(!$result)
 		{
-			die("Fail".mysqli_error($result));
+			die("Hun!");
 		}
-		$row=mysqli_fetch_assoc($result);
+		$row=$result->fetch_assoc();
 		if($_SESSION['qty'][$key]==$row['product_qty'])
 		{
 			$_SESSION['qty'][$key]=$row['product_qty'];
