@@ -46,10 +46,11 @@
 						<tbody>
 							<?php
 								 $product_count=0;
-								 $query="SELECT * FROM product WHERE product_status='approved' ORDER BY product_id DESC";
-								 $result=mysqli_query($con,$query);
+								 $query=$con->prepare("SELECT * FROM product WHERE product_status='approved' ORDER BY product_id DESC");
+								 $query->execute();
+								 $result=$query->get_result();
 
-								 while($row=mysqli_fetch_assoc($result))
+								 while($row=$result->fetch_assoc())
 								 {	
 								 	 $product_count+=1;
 								 	 $product_id=$row['product_id'];
@@ -69,25 +70,27 @@
 							 		?>
 									<tr>
 										<!-- <td><?php echo $product_id; ?></td> -->
-										<td><?php echo $product_count; ?></td>
-										<td><?php echo $product_title; ?></td>
+										<td><?php echo htmlspecialchars($product_count); ?></td>
+										<td><?php echo htmlspecialchars($product_title); ?></td>
 										<td>Shoe</td>
-										<td><?php echo $product_price; ?> MMK</td>
-										<td><?php echo $product_qty; ?></td>
-										<td><img src="../images/<?php echo $product_image; ?>" class="img-rounded imgwidth"></td>
+										<td><?php echo htmlspecialchars($product_price); ?> MMK</td>
+										<td><?php echo htmlspecialchars($product_qty); ?></td>
+										<td><img src="../images/<?php echo htmlspecialchars($product_image); ?>" class="img-rounded imgwidth"></td>
 										<?php
-											$user_query="SELECT * FROM user WHERE user_id=$product_seller_id ";
-											$user_result=mysqli_query($con,$user_query);
-											while($row=mysqli_fetch_assoc($user_result))
+											$user_query=$con->prepare("SELECT * FROM user WHERE user_id=? ");
+											$user_query->bind_param("i",$product_seller_id);
+											$user_query->execute()
+											$user_result=$user_query->get_result();
+											while($row=$user_result->fetch_assoc())
 											{
 											 	$product_seller_name=$row['username'];
 											}
 										 ?>
-										<td><?php echo $product_seller_name; ?></td>
+										<td><?php echo htmlspecialchars($product_seller_name); ?></td>
 
 										<!-- <td><?php echo $product_status; ?><a value="<?php echo $product_status; ?>"></a></td> -->
-										<td><a href="edit_product.php?product_id=<?php echo $product_id ?>" class="btn glyphicon glyphicon-edit"></a>
-											<a onclick="javascript:return confirm('Are you sure you want to delete?')" href="product.php?delete=<?php echo $product_id; ?>" class="btn glyphicon glyphicon-trash"></a></td>
+										<td><a href="edit_product.php?product_id=<?php echo htmlspecialchars($product_id); ?>" class="btn glyphicon glyphicon-edit"></a>
+											<a onclick="javascript:return confirm('Are you sure you want to delete?')" href="product.php?delete=<?php echo htmlspecialchars($product_id); ?>" class="btn glyphicon glyphicon-trash"></a></td>
 									</tr>
 									
 								<?php 
@@ -102,11 +105,13 @@
 			        if(isset($_GET['delete']))
 			        {
 				        $product_id = $_GET['delete'];
-				        $delete_query = "DELETE FROM product WHERE product_id ='$product_id'";
-				        $delete_result = mysqli_query($con,$delete_query);
+				        $delete_query = $con->prepare("DELETE FROM product WHERE product_id =?");
+				        $delete_query->bind_param("s",$product_id);
+				        $delete_query->execute();
+				        $delete_result = $delete_query->get_result();
 
 				        if(!$delete_result){
-				            die('Query Failed'. mysqli_error($delete_result));
+				            die('Query Failed');
 				        }
 
 				        header('Location:product.php');

@@ -38,9 +38,10 @@
             <a href="manage_user.php" class="btn btn-success">View All User </a>
           </div>
           <?php
-                 $query="SELECT * FROM user WHERE user_role='subscriber'";
-                 $result=mysqli_query($con,$query);
-                 while($row=mysqli_fetch_assoc($result))
+                 $query=$con->prepare("SELECT * FROM user WHERE user_role='subscriber'");
+                 $query->execute();
+                 $result=$query->get_result();;
+                 while($row=$result->fetch_assoc())
                  {
                    $user_id=$row['user_id'];
                    $user_name=$row['username'];
@@ -57,12 +58,12 @@
               ?>
           <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 col-md-offset-1 well" method="post">
             <img src="../images/<?php echo $user_image ?>" class="img-circle" width="100px" height="100px"><br>
-            <p class="glyphicon glyphicon-user"><?php echo $user_name; ?></p><br>
-            <p class="glyphicon glyphicon-phone"><?php echo $user_phone_no; ?></p><br>
-            <p class="glyphicon glyphicon-book"><a href="mailto:<?php echo $user_email; ?>?Subject=Welcome Seller&body=Hi,Thanks for choosing our service.Now you can start selling your products.Hope you enjoy our services.<br>Best Regards<br>walmal@info.com"><?php echo $user_email; ?></a></p><br>
-            <p class="glyphicon glyphicon-road"><?php echo $user_address; ?></p><br>
-            <a href="index.php?accept=<?php echo $user_id; ?>" class="btn btn-success">Accept</a>
-            <a href="index.php?reject=<?php echo $user_id; ?>" class="btn btn-danger">Reject</a>
+            <p class="glyphicon glyphicon-user"><?php echo htmlspecialchars($user_name); ?></p><br>
+            <p class="glyphicon glyphicon-phone"><?php echo htmlspecialchars($user_phone_no); ?></p><br>
+            <p class="glyphicon glyphicon-book"><a href="mailto:<?php echo htmlspecialchars($user_email); ?>?Subject=Welcome Seller&body=Hi,Thanks for choosing our service.Now you can start selling your products.Hope you enjoy our services.<br>Best Regards<br>walmal@info.com"><?php echo htmlspecialchars($user_email); ?></a></p><br>
+            <p class="glyphicon glyphicon-road"><?php echo htmlspecialchars($user_address); ?></p><br>
+            <a href="index.php?accept=<?php echo htmlspecialchars($user_id); ?>" class="btn btn-success">Accept</a>
+            <a href="index.php?reject=<?php echo htmlspecialchars($user_id); ?>" class="btn btn-danger">Reject</a>
           </div>
           <?php } ?>
         </div>
@@ -80,8 +81,10 @@
 <?php
   if(isset($_GET['accept'])){
     $user_id=$_GET['accept'];
-    $query="UPDATE user SET user_role='seller' WHERE user_id=$user_id";
-    $result=mysqli_query($con,$query);
+    $query=$con->prepare("UPDATE user SET user_role='seller' WHERE user_id=?");
+    $query->bind_param("s",$user_id);
+    $query->execute();
+    $result=$query->get_result();
     if ($result) {
     echo "Query oK";
      }else{
@@ -94,8 +97,9 @@
   <?php
   if(isset($_GET['reject'])){
     $user_id=$_GET['reject'];
-    $query="DELETE FROM user WHERE user_id=$user_id";
-    $result=mysqli_query($con,$query);
+    $query=$con->prepare("DELETE FROM user WHERE user_id=?");
+    $query->bind_param("s",$user_id);
+    $result=$query->get_result();
     if ($result) {
     echo "Query oK";
      }else{

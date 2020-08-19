@@ -140,11 +140,13 @@
 						if (isset($_POST['submit'])) 
 						{
 							$status=$_POST['rd'];
-						 	$query="UPDATE product SET product_status='$status' WHERE product_id=$product_id";
-					 		$result=mysqli_query($con,$query);
+						 	$query=$con->prepare("UPDATE product SET product_status=? WHERE product_id=?");
+						 	$query->bind_param("ss",$status,$product_id);
+						 	$query->execute();
+					 		$result=$query->get_result();
 					 		if(!$result)
 					 		{
-					 			die("Query Fail".mysqli_query($result));
+					 			die("Query Fail");
 					 		}
 					 		header('Location:product.php');
 						 	

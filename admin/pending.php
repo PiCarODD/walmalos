@@ -49,10 +49,11 @@
 						</thead>
 						<tbody>
 							<?php
-								 $query="SELECT * FROM product WHERE product_status='unapproved' ORDER BY product_id DESC";
-								 $result=mysqli_query($con,$query);
+								 $query=$con->prepare("SELECT * FROM product WHERE product_status='unapproved' ORDER BY product_id DESC");
+								 $query->execute();
+								 $result=$query->get_result();
 								 $count=1;
-								 while($row=mysqli_fetch_assoc($result))
+								 while($row=$result->fetch_assoc())
 								 {
 								 	 $product_id=$row['product_id'];
 								 	 $product_cat_id=$row['product_cat_id'];
@@ -71,12 +72,14 @@
 							?>
 							<tr>
 								<td><?php echo $count++; ?></td>
-								<td><?php echo $product_title; ?></td>
+								<td><?php echo htmlspecialchars($product_title); ?></td>
 								<td>
 									<?php 
-									 $cat_title_query="SELECT cat_id,cat_title FROM category WHERE cat_id=$product_cat_id";
-									 $cat_title_result=mysqli_query($con,$cat_title_query);
-									 while($cat_title_row=mysqli_fetch_assoc($cat_title_result))
+									 $cat_title_query=$con->prepare("SELECT cat_id,cat_title FROM category WHERE cat_id=?");
+									 $cat_title_query->bind_param("i",$product_cat_id);
+									 $cat_title_query->execute();
+									 $cat_title_result=$cat_title_query->get_result();
+									 while($cat_title_row=$cat_title_result->fetch_assoc())
 									 {
 									 	echo $cat_title=$cat_title_row['cat_title'];
 									 }
@@ -84,34 +87,36 @@
 									
 										
 									</td>
-								<td><?php echo $product_price; ?> MMK</td>
-								<td><?php echo $product_qty ?></td>
-								<td><img src="../images/<?php echo $product_image ?>" class="img-circle" width="100px" height="100px" class="imgwidth" alt=""></td>
+								<td><?php echo htmlspecialchars($product_price); ?> MMK</td>
+								<td><?php echo htmlspecialchars($product_qty); ?></td>
+								<td><img src="../images/<?php echo htmlspecialchars($product_image) ?>" class="img-circle" width="100px" height="100px" class="imgwidth" alt=""></td>
 								<td>
 									
 									<?php
-										$user_query="SELECT * FROM user WHERE user_id=$product_seller_id ";
-										$user_result=mysqli_query($con,$user_query);
-										while($row=mysqli_fetch_assoc($user_result))
+										$user_query=$con->prepare("SELECT * FROM user WHERE user_id=$product_seller_id ");
+										$user_query->bind_param("s",$product_seller_id);
+										$user_query->execute();
+										$user_result=$user_query->get_result();
+										while($row=$user_result->fetch_assoc())
 										{
 										 	$product_seller_name=$row['username'];
 										 	$user_nrc=$row['user_nrc'];
 										 	$user_phone_no=$row['user_phone_no'];
 										 	$user_address=$row['user_address'];
 											?>
-											<p>Name:<?php echo $product_seller_name ?></p>
-											<p>NRC:<?php echo $user_nrc ?></p>
-											<p>Phone:<?php echo $user_phone_no ?></p>
-											<p>Address:<?php echo $user_address ?></p>
+											<p>Name:<?php echo htmlspecialchars($product_seller_name); ?></p>
+											<p>NRC:<?php echo htmlspecialchars($user_nrc); ?></p>
+											<p>Phone:<?php echo htmlspecialchars($user_phone_no); ?></p>
+											<p>Address:<?php echo htmlspecialchars($user_address); ?></p>
 											<?php 
 										} 
 									?>
-									<a href="#info" id="toggle" data-toggle="collapse"><u><?php echo $product_seller_name ?></u></a>
+									<a href="#info" id="toggle" data-toggle="collapse"><u><?php echo htmlspecialchars($product_seller_name); ?></u></a>
 									<div class="panel-body collapse" id="info">
 									</div>
 								</td>
 								
-								<td><a href="pending.php?approved=<?php echo $product_id; ?>" class="btn glyphicon glyphicon-ok"></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="pending.php?delete=<?php echo $product_id; ?>" class="btn glyphicon glyphicon-remove" href=""></a></td>
+								<td><a href="pending.php?approved=<?php echo htmlspecialchars($product_id); ?>" class="btn glyphicon glyphicon-ok"></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="pending.php?delete=<?php echo htmlspecialchars($product_id); ?>" class="btn glyphicon glyphicon-remove" href=""></a></td>
 							</tr>
 						<?php } ?>
 
@@ -137,8 +142,10 @@
 <?php
 	if(isset($_GET['approved'])){
 		$product_id=$_GET['approved'];
-		$approve_query="UPDATE product SET product_status='approved' WHERE product_id=$product_id";
-		$approve_result=mysqli_query($con,$approve_query);
+		$approve_query=$con->prepare("UPDATE product SET product_status='approved' WHERE product_id=?");
+		$approve_query->bind_param("s",$product_id);
+		$approve_query->execute();
+		$approve_result=$approve_query->get_result();
 		if ($approve_result) {
 	 	echo "Query oK";
 		 }else{
@@ -151,8 +158,10 @@
 	<?php
 	if(isset($_GET['delete'])){
 		$product_id=$_GET['delete'];
-		$delete_query="DELETE FROM product WHERE product_id=$product_id";
-		$delete_result=mysqli_query($con,$delete_query);
+		$delete_query=$con->prepare("DELETE FROM product WHERE product_id=$product_id");
+		$delete_query->bind_param("i",$product_id);
+		$delete_query->execute();
+		$delete_result=$delete_query->get_result();
 		if ($delete_result) {
 	 	echo "Query oK";
 		 }else{

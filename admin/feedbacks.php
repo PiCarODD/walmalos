@@ -82,9 +82,10 @@
 						</thead>
 						<tbody>
 							<?php 
-								 $query="SELECT * FROM comment ";
-								 $result=mysqli_query($con,$query);
-								 while($row=mysqli_fetch_assoc($result))
+								 $query=$con->prepare("SELECT * FROM comment ");
+								 $query->execute();
+								 $result=$query->get_result();
+								 while($row=$result->fetch_assoc())
 								 {
 								 	 $comment_id=$row['comment_id'];
 								 	 $comment_post_id=$row['comment_post_id'];
@@ -121,8 +122,10 @@
 <?php
 	if(isset($_GET['approved'])){
 		$comment_id=mysqli_real_escape_string($con,$_GET['approved']);
-		$query="UPDATE comment SET comment_status='approved' WHERE comment_id=$comment_id";
-		$result=mysqli_query($con,$query);
+		$query=$con->prepare("UPDATE comment SET comment_status='approved' WHERE comment_id=?");
+		$query->bind_param("i",$comment_id);
+		$query->execute();
+		$result=$query->get_result();
 		header("location:feedbacks.php");
 
 	}
@@ -131,7 +134,9 @@
 <?php
 	if(isset($_GET['unapproved'])){
 		$comment_id=mysqli_real_escape_string($con,$_GET['unapproved']);
-		$query="DELETE FROM comment WHERE comment_id=$comment_id";
+		$query=$con->prepare("DELETE FROM comment WHERE comment_id=?");
+		$query->bind_param("i",$comment_id);
+		$query->execute();
 		$result=mysqli_query($con,$query);
 		header("location:feedbacks.php");
 

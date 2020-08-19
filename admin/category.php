@@ -53,12 +53,14 @@
 		if($cat_title==""){
 			echo "Sorry Retrype Category!!";
 		}else{
-		$query="INSERT INTO category(cat_title) VALUES ('$cat_title')";
-		$result=mysqli_query($con,$query);
+		$query=$con->prepare("INSERT INTO category(cat_title) VALUES ('?')");
+		$query->bind_param("s",$cat_title);
+		$query->execute();
+		$result=$query->get_result();
 		if ($result) {
 	 	echo "Success---";
 		 }else{
-		 	echo "Query Fail.";
+		 	echo "Huh?";
 	 			}
 	 		}
 	 			// header("location:category.php");
@@ -72,9 +74,11 @@
 	if(isset($_GET['edit'])){
 		$cat_id=mysqli_real_escape_string($con,$_GET['edit']);
 		$cat_id = (int) filter_var($cat_id, FILTER_SANITIZE_NUMBER_INT);
-		$query="SELECT * FROM category WHERE cat_id=$cat_id";
-		$result=mysqli_query($con,$query);
-		while($row=mysqli_fetch_assoc($result)){
+		$query=$con->prepare("SELECT * FROM category WHERE cat_id=?");
+		$query->bind_param("s",$cat_id);
+		$query->execute();
+		$result=$query->get_result();
+		while($row=$result->fetch_assoc()){
 			$cat_id=$row['cat_id'];
 			$cat_title=$row['cat_title'];
 
@@ -84,7 +88,7 @@
 	 	echo "";
 	
 		 }else{
-		 	echo "Query Fail.";die();
+		 	echo "Huh?";die();
 	 			}
 	 			
 	 		?>				<br><br>
@@ -105,12 +109,14 @@
 		if($cat_title==""){
 			echo "Type category name";
 		}else{
-		$query="UPDATE category SET cat_title='$cat_title' WHERE cat_id=$cat_id";
-		$result=mysqli_query($con,$query);
+		$query=$con->prepare("UPDATE category SET cat_title=? WHERE cat_id=?");
+		$query->bind_param("ss",$cat_title,$cat_id)
+		$query->execute()
+		$result=$query->get_result();
 		if ($result) {
-	 	echo "Query oK";
+	 	echo "oK";
 		 }else{
-		 	echo "Query Fail.";
+		 	echo "Huh?.";
 	 			}
 	 			header("location:category.php");
 
@@ -135,9 +141,10 @@
 						        
 						    </tr>
 						    <?php
-								 $query="SELECT * FROM category";
-								 $result=mysqli_query($con,$query);
-								 while($row=mysqli_fetch_assoc($result))
+								 $query=$con->prepare("SELECT * FROM category");
+								 $query->execute()
+								 $result=$query->get_result();
+								 while($row=$result->fetch_assoc())
 								 {
 								 	$cat_id=htmlspecialchars($row['cat_id']);
 								 	$cat_title=htmlspecialchars($row['cat_title']);
@@ -176,8 +183,10 @@
 <?php
 	if(isset($_GET['delete'])){
 		$cat_id=mysqli_real_escape_string($con,$_GET['delete']);
-		$query="DELETE FROM category WHERE cat_id=$cat_id";
-		$result=mysqli_query($con,$query);
+		$query=$con->prepare("DELETE FROM category WHERE cat_id=?");
+		$query->bind_param("s",$cat_id);
+		$query->execute();
+		$result=$query->get_result();
 		header("location:category.php");
 
 	}

@@ -95,12 +95,14 @@
 		$event_end_date=$_POST['event_end_date'];
 		$event_location=$_POST['event_location'];
 		$comment="";
-		$query="INSERT INTO event(event_name, description, start_date, end_date, location, comment) VALUES ('$event_name','$event_description','$event_start_date','$event_end_date','$event_location','$comment')";
-		$result=mysqli_query($con,$query);
+		$query=$con->prepare("INSERT INTO event(event_name, description, start_date, end_date, location, comment) VALUES (?,?,?,?,?,?)");
+		$query->bind_param("ssssss",$event_name,$event_description,$event_start_date,$event_location,$comment);
+		$query->execute();
+		$result=$query->get_result();
 		if ($result) {
 	 	echo "Success---";
 		 }else{
-		 	echo "Query Fail.";
+		 	echo "Huh?";
 	 			}
 	 		}
 	 			// header("location:category.php");

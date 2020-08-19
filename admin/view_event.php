@@ -51,9 +51,10 @@
 						<tbody>
 							<?php
 								 $event_count=0;
-								 $query="SELECT * FROM event ORDER BY event_id DESC";
-								 $result=mysqli_query($con,$query);
-								 while($row=mysqli_fetch_assoc($result))
+								 $query=$con->prepare("SELECT * FROM event ORDER BY event_id DESC");
+								 $query->execute();
+								 $result=$query->get_result();
+								 while($row=$result->fetch_assoc())
 								 {
 								 	 $event_id=$row['event_id'];
 								 	 $event_name=$row['event_name'];
@@ -65,14 +66,14 @@
 							?>
 							<tr>
 								<td><?php echo $event_count+=1; ?></td>
-								<td><?php echo $event_name; ?></td>
-								<td><?php echo $description; ?><br>
+								<td><?php echo htmlspecialchars($event_name); ?></td>
+								<td><?php echo htmlspecialchars($description); ?><br>
 								Come and join us</td>
-								<td><?php echo $start_date; ?></td>
-								<td><?php echo $end_date; ?></td>
-								<td><?php echo $location; ?></td>
-								<td><a href="edit_event.php?edit=<?php echo $event_id;?>" class="btn glyphicon glyphicon-edit"></a>
-									<a href="view_event.php?delete=<?php echo $event_id;?>" class="btn glyphicon glyphicon-trash"></a></td>
+								<td><?php echo htmlspecialchars($start_date); ?></td>
+								<td><?php echo htmlspecialchars($end_date); ?></td>
+								<td><?php echo htmlspecialchars($location); ?></td>
+								<td><a href="edit_event.php?edit=<?php echo htmlspecialchars($event_id);?>" class="btn glyphicon glyphicon-edit"></a>
+									<a href="view_event.php?delete=<?php echo htmlspecialchars($event_id);?>" class="btn glyphicon glyphicon-trash"></a></td>
 							</tr>
 						<?php } ?>
 						</tbody>
@@ -95,8 +96,10 @@
 <?php
 	if(isset($_GET['delete'])){
 		$event_id=$_GET['delete'];
-		$query="DELETE FROM event WHERE event_id=$event_id";
-		$result=mysqli_query($con,$query);
+		$query=$con->prepare("DELETE FROM event WHERE event_id=?");
+		$query->bind_param("s",$event_id);
+		$query->execute();
+		$result=$query->get_result();
 		header("location:view_event.php");
 
 	}

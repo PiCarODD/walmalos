@@ -34,11 +34,13 @@
         if(isset($_GET['delete']))
         {
 	        $product_id = $_GET['delete'];
-	        $delete_query = "DELETE FROM product WHERE product_id ='$product_id'";
-	        $delete_result = mysqli_query($con,$delete_query);
+	        $delete_query = $con->prepare("DELETE FROM product WHERE product_id =?");
+	        $delete_query->bind_param("s",$product_id);
+	        $delete_query->execute();
+;	        $delete_result = $delete_query->get_result();
 
 	        if(!$delete_result){
-	            die('Query Failed'. mysqli_error($delete_result));
+	            die('Huh?');
 	        }
         }
             
@@ -69,7 +71,7 @@
 	                    $per_page=3;
 	                    if (isset($_GET['page'])) 
 	                    {
-	                       $page=$_GET['page'];
+	                       $page=htmlspecialchars($_GET['page']);
 
 	                    }
 	                    else
@@ -92,24 +94,28 @@
                 <?php 
                 	$user_id=$_SESSION['user_id'];
                 	//$username=$_SESSION['username'];
-                    $product_count_query="SELECT * FROM product WHERE product_seller_id=$user_id";
-                    $product_count_result=mysqli_query($con,$product_count_query);
+                    $product_count_query=$con->prepare("SELECT * FROM product WHERE product_seller_id=?");
+                    $product_count_query->bind_param("s",$user_id);
+                    $product_count_query->execute();
+                    $product_count_result=$product_count_query->get_result();
                     if(!$product_count_result)
                     {
-                        die('Query Failed'. mysqli_error($product_count_result));
+                        die('Huh?');
                     }
                     $product_count=mysqli_num_rows($product_count_result);
                     
                     //echo $product_count;
                     $count=ceil($product_count/3);
                
-					$query ="SELECT * FROM product WHERE product_seller_id=$user_id ORDER BY product_id DESC LIMIT $page_start,$per_page";
-                    $result=mysqli_query($con,$query);
+					$query =$con->prepare("SELECT * FROM product WHERE product_seller_id=? ORDER BY product_id DESC LIMIT ?,?");
+					$query->bind_param("sss",$user_id,$page_start,$per_page);
+					$query->execute();
+                    $result=$query->get_result();
                      if(!$result){
-                            die('Query Failed'. mysqli_error($result));
+                            die('Huh?');
                         }
                     
-                    while($row = mysqli_fetch_assoc($result) ) 
+                    while($row = $result->fetch_assoc() ) 
                     {
                          $no_count+=1;
                          $product_id = $row['product_id'];
@@ -123,26 +129,28 @@
                           
 						?>
 							<tr>
-								<td><?php echo $no_count; ?></td>
-								<td><?php echo $product_title; ?></td>
-								<td><img src="../images/<?php echo $product_image ?>" alt="" class ="img-responsive" width="100px;"></td>
+								<td><?php echo htmlspecialchars($no_count); ?></td>
+								<td><?php echo htmlspecialchars($product_title); ?></td>
+								<td><img src="../images/<?php echo htmlspecialchars($product_image) ?>" alt="" class ="img-responsive" width="100px;"></td>
 								<td><?php 
-                                    $query = "SELECT * FROM category WHERE cat_id = $product_cat_id";
-                                    $cat_result = mysqli_query($con,$query);
+                                    $query = $con->prepare("SELECT * FROM category WHERE cat_id = ?");
+                                    $query->bind_param("s",$product_cat_id);
+                                    $query->execute();
+                                    $cat_result = $query->get_result();
                                     if(!$cat_result){
-                                        die("Query Failed". mysqli_error($cat_result));
+                                        die("Hun?");
                                     }
-                                    while ($row = mysqli_fetch_assoc($cat_result)) {
-                                        echo $cat_title = $row['cat_title'];
+                                    while ($row = $cat_result->fetch_assoc()) {
+                                        echo $cat_title = htmlspecialchars($row['cat_title']);
                                         
                                     }   
                                  ?></td>
-								<td><?php echo $product_price?></td>
-								<td><?php echo $product_qty ?></td>
-								<td><p class=""><?php echo $product_status ?></p></td>
-								<td><a href="products.php?delete=<?php echo $product_id?> "><span class="glyphicon glyphicon-trash">
+								<td><?php echo htmlspecialchars($product_price);?></td>
+								<td><?php echo htmlspecialchars($product_qty); ?></td>
+								<td><p class=""><?php echo htmlspecialchars($product_status); ?></p></td>
+								<td><a href="products.php?delete=<?php echo htmlspecialchars($product_id);?> "><span class="glyphicon glyphicon-trash">
 								</span></td>
-								<td><a href="update_products.php?edit=<?php echo $product_id?>">Edit</a></td>
+								<td><a href="update_products.php?edit=<?php echo htmlspecialchars($product_id);?>">Edit</a></td>
 							</tr>
 							<?php
 						}

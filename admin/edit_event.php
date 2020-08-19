@@ -27,9 +27,11 @@
 				if(isset($_GET['edit']))
 				{
 								 $event_id=$_GET['edit'];
-					 			 $query="SELECT * FROM event WHERE event_id=$event_id";
-								 $result=mysqli_query($con,$query);
-								 while($row=mysqli_fetch_assoc($result))
+					 			 $query=$con->prepare("SELECT * FROM event WHERE event_id=?");
+					 			 $query->bind_param("s",$event_id);
+					 			 $query->execute();
+								 $result=$query->get_result();
+								 while($row=$result->fetch_assoc())
 								 {
 								 	 $event_id=$row['event_id'];
 								 	 $event_name=$row['event_name'];
@@ -53,13 +55,13 @@
 								<label for="pid" class="control-label">Event Name</label>
 								<div class="input-group">
 									<span class="input-group-addon">*</span>
-									<input type="text" class="form-control" id="pid" name="event_name" value="<?php echo $event_name;?>">
+									<input type="text" class="form-control" id="pid" name="event_name" value="<?php echo htmlspecialchars($event_name);?>">
 								</div>
 							</div>
 							<div class="form-group">
 								<label for="pn" class="control-label">Description</label>
 								<div class="input-group">
-									<textarea rows="5" cols="50" class="form-control rounded-0"name="event_description" value="<?php echo $event_description;?>"></textarea>
+									<textarea rows="5" cols="50" class="form-control rounded-0"name="event_description" value="<?php echo htmlspecialchars($event_description);?>"></textarea>
 								</div>
 							</div>	
 							<div class="form-group">
@@ -80,7 +82,7 @@
 								<label for="pi" class="control-label">Location</label>
 								<div class="input-group">
 									<span class="input-group-addon">*</span>
-									<input type="text" class="form-control" id="pi" name="event_location" value="<?php echo $location;?>">
+									<input type="text" class="form-control" id="pi" name="event_location" value="<?php echo htmlspecialchars($location);?>">
 								</div>
 							</div>
 							<div class="form-group">
@@ -114,8 +116,10 @@
 		$event_end_date=$_POST['event_end_date'];
 		$event_location=$_POST['event_location'];
 		$comment="";
-		$query="UPDATE event SET event_name='$event_name',description='$event_description',start_date='$event_start_date',end_date='$event_end_date',location='$event_location',comment='$comment' WHERE  event_id=$event_id";
-		$result=mysqli_query($con,$query);
+		$query=$con->prepare("UPDATE event SET event_name=?,description=?,start_date=?,end_date=?,location=?,comment=? WHERE  event_id=?");
+		$query->bind_param("ssssssi",$event_name,$event_description,$event_start_date,$event_end_date,$event_location,$comment,$event_id);
+		$query->execute();
+		$result=$query->get_result();
 		if ($result) {
 	 	echo "Success---";
 		 }else{

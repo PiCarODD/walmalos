@@ -54,9 +54,10 @@
 						<tbody>
 							<?php
 								 $no=0;
-								 $query="SELECT * FROM user WHERE user_role='seller' ORDER BY user_id DESC";
-								 $result=mysqli_query($con,$query);
-								 while($row=mysqli_fetch_assoc($result))
+								 $query=$con->prepare("SELECT * FROM user WHERE user_role='seller' ORDER BY user_id DESC");
+								 $query->execute();
+								 $result=$query->get_result();
+								 while($row=$result->fetch_assoc())
 								 {
 								 	 $no+=1;
 								 	 $user_id=$row['user_id'];
@@ -73,31 +74,32 @@
 								 
 							?>
 							<tr>
-								<td><?php echo $no; ?></td>
-								<td><?php echo $user_name; ?></td>
-								<td><?php echo $user_phone_no; ?></td>
-								<td><?php echo $user_email; ?></td>
-								<td><?php echo $user_nrc; ?></td>
-								<td><?php echo $user_address; ?></td>
-								<td><img src="../images/<?php echo $user_image ?>" class="img-circle" width="100px" height="100px"></td>
+								<td><?php echo htmlspecialchars($no); ?></td>
+								<td><?php echo htmlspecialchars($user_name); ?></td>
+								<td><?php echo htmlspecialchars($user_phone_no); ?></td>
+								<td><?php echo htmlspecialchars($user_email); ?></td>
+								<td><?php echo htmlspecialchars($user_nrc); ?></td>
+								<td><?php echo htmlspecialchars($user_address); ?></td>
+								<td><img src="../images/<?php echo htmlspecialchars($user_image) ?>" class="img-circle" width="100px" height="100px"></td>
 								<?php 
-									$seller_query="SELECT * FROM product WHERE product_seller_id=$user_id";
-									$seller_result=mysqli_query($con,$seller_query);
+									$seller_query=$con->prepare("SELECT * FROM product WHERE product_seller_id=?");
+									$seller_query->bind_param("s",$user_id)
+									$seller_result=$seller_query->get_result();
 									if(!$seller_result)
 									{
-										die("Seller query fail".mysqli_error($seller_result));
+										die("Seller query fail");
 									}
 									$total_qty=0;
 									$total_selling_price=0;
-									while ($seller_row=mysqli_fetch_assoc($seller_result)) 
+									while ($seller_row=$seller_result->fetch_assoc()) 
 									{
 										$total_qty+=$seller_row['product_qty'];
 										$total_selling_price+=$seller_row['product_qty']*$seller_row['product_price'];
 									}
 								?>
-								<td><?php echo $total_qty ?></td>
-								<td><?php echo $total_selling_price ?></td>
-								<td><a href="manage_user.php?delete=<?php echo $user_id;?>" class="btn glyphicon glyphicon-trash" method="post"></a></td>
+								<td><?php echo htmlspecialchars($total_qty) ?></td>
+								<td><?php echo htmlspecialchars($total_selling_price) ?></td>
+								<td><a href="manage_user.php?delete=<?php echo htmlspecialchars($user_id);?>" class="btn glyphicon glyphicon-trash" method="post"></a></td>
 							</tr>
 
 						<?php } ?>
@@ -123,11 +125,15 @@
 <?php
 	if(isset($_GET['delete'])){
 		$user_id=$_GET['delete'];
-		$query="DELETE FROM user WHERE user_id=$user_id";
-		$result=mysqli_query($con,$query);
+		$query=$con->prepare("DELETE FROM user WHERE user_id=?");
+		$query->bind_param("s",$user_id);
+		$query->execute()
+		$result=$query->get_result();
 
-		$seller_delete_query="DELETE FROM product WHERE product_seller_id=$user_id";
-		$seller_delete_result=mysqli_query($con,$seller_delete_query);
+		$seller_delete_query=$con->prepare("DELETE FROM product WHERE product_seller_id=?");
+		$seller_delete_query->bind_param("s",$user_id);
+		$seller_delete_query->execute();
+		$seller_delete_result=$seller_delete_query->get_result();
 
 		header("location:manage_user.php");
 	}

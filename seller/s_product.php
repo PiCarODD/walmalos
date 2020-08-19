@@ -50,12 +50,14 @@
 
                     move_uploaded_file($product_image_temp,"../images/$product_image");
 
-                    $product_query="INSERT INTO product(product_cat_id, product_title, product_image, product_content, product_date, product_price, product_qty, product_seller_id, product_status) VALUES ($cat_id,'$product_title','$product_image', '$product_content', now(),'$product_price','$product_qty',$product_seller_id,'unapproved')";
-                    $product_result=mysqli_query($con,$product_query);
+                    $product_query=$con->prepare("INSERT INTO product(product_cat_id, product_title, product_image, product_content, product_date, product_price, product_qty, product_seller_id, product_status) VALUES (?,?,?, ?, now(),?,?,?,'unapproved')");
+                    $product_query->bind_param("issssss",$cat_id,$product_title,$product_image,$product_content,$product_price,$product_qty,$product_seller_id);
+                    $product_query->execute();
+                    $product_result=$product_query->get_result();
                      
 					if(!$product_result)
 					{
-						die("Query failed" . mysqli_error($product_result));
+						die("Huh?");
 					}
 
 					header("Location:products.php");
@@ -101,11 +103,12 @@
 												<div class="input-group">
 													<select class="form-group" name="cat_title" required="submit">
 														<?php 
-															$query="SELECT * FROM category";
-															$result=mysqli_query($con,$query);
-															while ($row=mysqli_fetch_assoc($result)) {
+															$query=$con->prepare("SELECT * FROM category");
+															$query->execute();
+															$result=$query->get_result();
+															while ($row=$result->fetch_assoc()) {
 																$cat_id=$row['cat_id'];
-																$cat_title=$row['cat_title'];
+																$cat_title=htmlspecialchars($row['cat_title']);
 																echo "<option value='{$cat_id}'>{$cat_title}</option> ";
 															}
 
@@ -147,7 +150,7 @@
 												<label for="qty" class="control-label">Seller Name</label>
 												<div class="input-group">
 													<span class="input-group-addon">*</span>
-													<input type="text" value="<?php echo $_SESSION['username'] ?>" class="form-control" id="qty" name="product_seller_name" required>
+													<input type="text" value="<?php echo htmlspecialchars($_SESSION['username']) ?>" class="form-control" id="qty" name="product_seller_name" required>
 												</div>
 											</div>
 											<br>

@@ -34,13 +34,15 @@
 	<?php
 	 if(isset($_GET['edit'])){
 	 	$product_id = $_GET['edit'];
-		$query = "SELECT * FROM product WHERE product_id=$product_id";
-		$result = mysqli_query($con,$query); 
+		$query = $con->prepare("SELECT * FROM product WHERE product_id=?");
+		$query->bind_param("s",$product_id);
+		$query->execute();
+		$result = $query->get_result(); 
 		if(!$result){
-		 	die("Query Failed".mysqli_error($result));
+		 	die("Huh?");
 
 		 }
-		while ($row = mysqli_fetch_assoc($result)) {
+		while ($row = $result->fetch_assoc()) {
 			
             //echo $product_title=$row['product_title'];
             //echo $cat_title=$row['cat_title'];
@@ -62,11 +64,12 @@
 	        $product_qty=$_POST['product_qty'];
 			
 
-			$query = "UPDATE product SET product_price=$product_price,product_qty=$product_qty WHERE product_id=$product_id";                                                                        
-
-			$result = mysqli_query($con,$query);
+			$query = $con->prepare("UPDATE product SET product_price=$product_price,product_qty=$product_qty WHERE product_id=$product_id");
+			$query->bind_param("sss",$product_price,$product_qty,$product_id);          
+			$query->execute();
+			$result = $query->get_result();
 			if(!$result){
-			 	die("Query Failed".mysqli_error($result));
+			 	die("Huh?");
 
 			 }
 	       header("Location:products.php");
