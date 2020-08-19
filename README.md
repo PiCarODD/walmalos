@@ -1,16 +1,20 @@
 ![Logo](https://github.com/PiCarODD/walmalos/blob/master/assets/img/logo1.png)
 ## WalMal Online Shop
 ## About
-WalMal is an open source CMS website that aim to imporve Myanmar open source community.Feature are easy sell,easy pay,easy purchase,easy communication between customer and sellers.
+WalMal is an open source CMS website that aim to imporve Myanmar open source community.Feature are 
+* Easy sell
+* Easy pay
+* Easy purchase
+* Easy communication between customer and sellers.
 
 ![Index Page](https://github.com/PiCarODD/walmalos/blob/master/walmalpoc/main.PNG)
-* Fig : Main Index Page*
+*Fig : Main Index Page*
 
 ![Admin Pannel](https://github.com/PiCarODD/walmalos/blob/master/walmalpoc/cms_category.PNG)
-* Fig : Admin Pannel*
+*Fig : Admin Pannel*
 
 ![Seller Pannel](https://github.com/PiCarODD/walmalos/blob/master/walmalpoc/total_order.PNG)
-* Fig : Seller Pannel*
+*Fig : Seller Pannel*
 
 ## Flow charts
 ![admin](https://github.com/PiCarODD/walmalos/blob/master/walmalpoc/admin_flowchart.png)
