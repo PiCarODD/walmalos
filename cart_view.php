@@ -19,13 +19,11 @@ Body Section
   <hr class="soften"/>	
 <!-- <div  style="overflow: hidden;"> -->
   <table class="table table-bordered table-condensed" style="table-layout: fixed;">
-    <thead style="overflow: hidden;">
+    <thead style="overflow-y: hidden;">
       <tr>
       	<th style="width: 25px;">No</th>
         <th>Product</th>
         <th>Seller Name</th>
-        <th style="width: 190px;">Seller Email</th>
-        <th>Seller Ph no.</th>
         <th>Description</th>
         <th>Avaliable</th>
         <th>Unit price</th>
@@ -44,7 +42,6 @@ Body Section
           $cart_product_id=$_GET['cart_product_id'];
           htmlspecialchars($cart_product_id);
           add_to_cart($cart_product_id);
-          
         }
       ?>
       
@@ -124,18 +121,10 @@ Body Section
               $stmt->bind_param("ssss",$customer_name,$customer_phone,$customer_email,$customer_address);
               $stmt->execute();
               $insert_result = $stmt->get_result();
-              if (!$insert_result) 
-              {
-                die("Insert customer fail".mysqli_error($insert_result));
-              }
               $stmt=$con->prepare("SELECT * FROM customer WHERE customer_phone_no=? AND customer_email=?");
               $stmt->bind_param("ss",$customer_phone,$customer_address);
               $stmt->execute();
               $select_result= $stmt->get_result();
-              if (!$select_result) 
-              {
-                die("Insert customer fail".mysqli_error($select_result));
-              }
               while ($select_row=$select_result->fetch_assoc()) 
               {
                 $customer_id=$select_row['customer_id'];

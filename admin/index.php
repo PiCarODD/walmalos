@@ -84,28 +84,14 @@
     $query=$con->prepare("UPDATE user SET user_role='seller' WHERE user_id=?");
     $query->bind_param("s",$user_id);
     $query->execute();
-    $result=$query->get_result();
-    if ($result) {
-    echo "Query oK";
-     }else{
-      echo "Query Fail.";
-        }
-        header("location:index.php");
-
+    header("location:index.php");
   }
-  ?>
-  <?php
   if(isset($_GET['reject'])){
     $user_id=$_GET['reject'];
     $query=$con->prepare("DELETE FROM user WHERE user_id=?");
     $query->bind_param("s",$user_id);
-    $result=$query->get_result();
-    if ($result) {
-    echo "Query oK";
-     }else{
-      echo "Query Fail.";
-        }
-        header("location:index.php");
+    $query->execute();
+    header("location:index.php");
 
   }
   ?>

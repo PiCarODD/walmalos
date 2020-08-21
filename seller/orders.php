@@ -59,13 +59,9 @@
 									$username=$_SESSION['username'];
 
 									$query=$con->prepare("SELECT * FROM product WHERE product_seller_id=?");
-									$query->bind_param("s",$user_id);
+									$query->bind_param("i",$user_id);
 									$query->execute();
 									$result=$query->get_result();
-									if(!$result)
-									{
-										die("Huh?");
-									}
 
 									
 									while ($product_row=$result->fetch_assoc()) 
@@ -76,10 +72,6 @@
 										$query->bind_param("s",$product_id);
 										$query->execute();
 										$cart_result=$query->get_result();
-										if(!$cart_result)
-										{
-											die("Huh?");
-										}
 
 										while ($row=$cart_result->fetch_assoc()) 
 										{
@@ -94,11 +86,6 @@
 											$customer_query-> bind_param("s",$customer_id);
 											$customer_query->execute();
 											$customer_result=$customer_query->get_result();
-											if(!$customer_result)
-											{
-												die("Huh?");
-											}
-
 											while ($customer_row=$customer_result->fetch_assoc())
 											{
 												$customer_name=$customer_row['customer_name'];
@@ -147,10 +134,6 @@
 								 		$delete_query->bind_param("s",$cart_id);
 								 		$delete_query->execute();
 								 		$delete_result=$delete_query->get_result();
-								 		if(!$delete_result)
-								 		{
-								 			die("Huh?");
-								 		}
 								 		header("Location:orders.php");
 								 	}
 								  ?>

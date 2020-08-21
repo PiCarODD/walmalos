@@ -14,13 +14,8 @@
                       $stmt = $con->prepare("SELECT * FROM product WHERE product_id=?");
                       $stmt->bind_param("s",$product_id);
                       $stmt->execute();
-                      $res = $stmt->get_result();
-                      if (!$res) 
-                      {
-                        die("Huh?");
-                      }
-                      
-                      while ($row=$result->fetch_assoc())
+                      $res = $stmt->get_result();                
+                      while ($res != "" && $row=$res->fetch_assoc())
                       {
                             //echo $_SESSION['qty'][$key];
                             $product_id=$row['product_id'];
@@ -49,8 +44,6 @@
                             <td><?php echo $count+=1; ?></td>
                             <td><img width="100" class="img-responsive" src="images/<?php echo htmlspecialchars($product_image); ?>" alt=""></td>
                             <td><?php echo htmlspecialchars($seller_name); ?></td>
-                            <td><?php echo htmlspecialchars($seller_email); ?></td>
-                            <td><?php echo htmlspecialchars($seller_phone_no); ?></td>
                             <td><?php echo htmlspecialchars($product_content); ?></td>
                             
                             <td>
@@ -65,13 +58,6 @@
                                 <a href="cart_view.php?add=<?php echo $key; ?>&&id=<?php echo htmlspecialchars($product_id); ?>"><input type="button" value="+"></a>
 
                               </div>
-
-                              <!-- 
-                                <a href="cart.php ? remove=<?php echo $product_id ?>" class="btn-btn-warning"><span class="glyphicon glyphicon-minus"></span></a>
-                                 && add_product_id=<?php echo $product_id ?>
-                                <input class="span1" style="max-width:34px; color: blue;" placeholder="1"  size="16" type="number" name="tot_qty" value="<?php echo $_SESSION['qty'][$key] ?>" min="0" max="<?php echo $product_qty ?>"> -->
-
-
                             </td>
                             <td> <?php echo $_SESSION['total'][$key]=$_SESSION['qty'][$key] * $product_price ?> MMK</td>
                             <td><a href="cart_view.php?delete=<?php echo htmlspecialchars($key); ?>">Delete</a></td>
@@ -87,7 +73,7 @@
               }
               ?>
               <tr>
-                            <td colspan="9" class="alignR" style="line-height: 30px"><b>Total price:</b> </td>
+                            <td colspan="8" class="alignR" style="line-height: 30px"><b>Total price:</b> </td>
                             <td style="line-height: 30px;color:white;background-color: #F89406;"><b><?php echo htmlspecialchars($total) ?> MMK</b> <?php  ?></td>
                           </tr>  
               <?php             

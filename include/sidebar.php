@@ -9,7 +9,7 @@
 						$cat_id=$row['cat_id'];
 						$cat_title=$row['cat_title'];
 				 ?>
-				<li><a href="view_product.php?cat_id=<?php echo htmlspecialchars($cat_id); ?>"><span class="icon-chevron-right"></span><?php echo htmlspecialchars($cat_title); ?></a></li>
+				<li><a href="view_product.php?cat_id=<?php echo htmlspecialchars($cat_id); ?>"><span class="icon-chevron-right"></span><?php echo ucwords(htmlspecialchars($cat_title)); ?></a></li>
 			<?php } ?>
 				
 				<!-- <li style="border:0"> &nbsp;</li> -->

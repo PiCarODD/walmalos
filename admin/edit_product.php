@@ -143,11 +143,6 @@
 						 	$query=$con->prepare("UPDATE product SET product_status=? WHERE product_id=?");
 						 	$query->bind_param("ss",$status,$product_id);
 						 	$query->execute();
-					 		$result=$query->get_result();
-					 		if(!$result)
-					 		{
-					 			die("Query Fail");
-					 		}
 					 		header('Location:product.php');
 						 	
 						}

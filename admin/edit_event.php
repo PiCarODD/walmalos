@@ -119,15 +119,7 @@
 		$query=$con->prepare("UPDATE event SET event_name=?,description=?,start_date=?,end_date=?,location=?,comment=? WHERE  event_id=?");
 		$query->bind_param("ssssssi",$event_name,$event_description,$event_start_date,$event_end_date,$event_location,$comment,$event_id);
 		$query->execute();
-		$result=$query->get_result();
-		if ($result) {
-	 	echo "Success---";
-		 }else{
-		 	echo "Query Fail.";
-	 			}
-	 		}
-	 		
-	
-
-	?>
+		header("location:add_event.php");	
+	}
+?>
 

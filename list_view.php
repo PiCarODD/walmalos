@@ -30,7 +30,7 @@ Body Section
 			<img src="images/<?php echo htmlspecialchars($product_image); ?>" width="150px" alt="">
 		</div>
 		<div class="col-md-5">
-			<h5><?php echo htmlspecialchars($product_title); ?></h5>
+			<h5><?php echo ucwords(htmlspecialchars($product_title)); ?></h5>
 			<p>
 			<?php echo htmlspecialchars($product_content); ?>
 			</p>

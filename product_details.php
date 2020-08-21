@@ -37,10 +37,6 @@ Body Section
 					$stmt->bind_param('s', $product_id); // 's' specifies the variable type => 'string'
 					$stmt->execute();
 					$result = $stmt->get_result();
-					if (!$result) 
-					{
-						die("Huh?");
-					}
 					while ($row= $result->fetch_assoc())
 					{
 						$product_cat_id=$row['product_cat_id'];
@@ -71,7 +67,7 @@ Body Section
 							</form>
 						</div>
 						<div class="col-md-7">
-							<h3><?php echo htmlspecialchars($product_title); ?><div class="pull-right"><a href="index.php" class="btn btn-success"><span class="icon icon-arrow-left"></span></a></div></h3>
+							<h3><?php echo ucwords(htmlspecialchars($product_title)); ?><div class="pull-right"><a href="index.php" class="btn btn-success"><span class="icon icon-arrow-left"></span></a></div></h3>
 							<hr class="soft"/>
 
 							<form class="form-horizontal qtyFrm">
@@ -139,10 +135,6 @@ Body Section
 			$stmt->bind_param('i',$select_comment_post_id);
 			$stmt->execute();
 			$result=$stmt->get_result();
-            if (!$result) {
-            	die("Huh?");
-            }
-
             while ($row=$result->fetch_assoc()) {
             	$comment_author=$row['comment_author'];
             	$comment_date=$row['comment_date'];

@@ -35,10 +35,6 @@
 		$stmt->bind_param("s",$cart_product_id);
 		$stmt->execute();
 		$result=$stmt->get_result();
-		if(!$result)
-		{
-			die("Hun!");
-		}
 		$row=$result->fetch_assoc();
 		if($_SESSION['qty'][$key]==$row['product_qty'])
 		{

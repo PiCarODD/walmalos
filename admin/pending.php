@@ -93,7 +93,7 @@
 								<td>
 									
 									<?php
-										$user_query=$con->prepare("SELECT * FROM user WHERE user_id=$product_seller_id ");
+										$user_query=$con->prepare("SELECT * FROM user WHERE user_id=? ");
 										$user_query->bind_param("s",$product_seller_id);
 										$user_query->execute();
 										$user_result=$user_query->get_result();
@@ -145,29 +145,16 @@
 		$approve_query=$con->prepare("UPDATE product SET product_status='approved' WHERE product_id=?");
 		$approve_query->bind_param("s",$product_id);
 		$approve_query->execute();
-		$approve_result=$approve_query->get_result();
-		if ($approve_result) {
-	 	echo "Query oK";
-		 }else{
-		 	echo "Query Fail.";die();
-	 			}
-	 			header("location:pending.php");
+	 	header("location:pending.php");
 
 	}
 	?>
 	<?php
 	if(isset($_GET['delete'])){
 		$product_id=$_GET['delete'];
-		$delete_query=$con->prepare("DELETE FROM product WHERE product_id=$product_id");
+		$delete_query=$con->prepare("DELETE FROM product WHERE product_id=?");
 		$delete_query->bind_param("i",$product_id);
 		$delete_query->execute();
-		$delete_result=$delete_query->get_result();
-		if ($delete_result) {
-	 	echo "Query oK";
-		 }else{
-		 	echo "Query Fail.";die();
-	 			}
-	 			header("location:pending.php");
-
+		header("location:pending.php");
 	}
-	?>
+?>

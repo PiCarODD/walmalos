@@ -37,10 +37,6 @@ if(isset($_POST['submit'])){
 		$query->bind_param("s",$email);
 		$query->execute();
 		$result = $query->get_result();
-		if(!$result)
-		{
-			die("Huh?");
-		}
 		if(mysqli_num_rows($result)>0)
 		{
 			header("Location:register.php?fail");
@@ -50,12 +46,9 @@ if(isset($_POST['submit'])){
 			$password=password_hash($password,PASSWORD_BCRYPT,array('cost'=>10));
 			$query=$con->prepare("INSERT INTO user(username, user_password, user_email, user_image, user_role, user_nrc, user_phone_no, user_address) VALUES ('$username','$password','$email', '$user_image', 'subscriber','$user_nrc','$user_phone_no','$user_address')");
 			$query->bind_param("ssssssss",$username,$password,$email,$target_file,$subscriber,$user_nrc,$user_phone_no,$user_address);
+			$query->execute();
 			$result=$query->get_result();
 			header("Location:register.php?success");
-			if(!$result)
-			{
-				die("Hun?");
-			}
 			//header("Location:register.php?success");
 		}
 	}

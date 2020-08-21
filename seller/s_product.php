@@ -53,13 +53,6 @@
                     $product_query=$con->prepare("INSERT INTO product(product_cat_id, product_title, product_image, product_content, product_date, product_price, product_qty, product_seller_id, product_status) VALUES (?,?,?, ?, now(),?,?,?,'unapproved')");
                     $product_query->bind_param("issssss",$cat_id,$product_title,$product_image,$product_content,$product_price,$product_qty,$product_seller_id);
                     $product_query->execute();
-                    $product_result=$product_query->get_result();
-                     
-					if(!$product_result)
-					{
-						die("Huh?");
-					}
-
 					header("Location:products.php");
 				
                      // $coproduct_count_query="UPDATE posts SET post_comment_count=post_comment_count+1 WHERE post_id=$post_id";

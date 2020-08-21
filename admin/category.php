@@ -53,18 +53,11 @@
 		if($cat_title==""){
 			echo "Sorry Retrype Category!!";
 		}else{
-		$query=$con->prepare("INSERT INTO category(cat_title) VALUES ('?')");
+		$query=$con->prepare("INSERT INTO category(cat_title) VALUES (?)");
 		$query->bind_param("s",$cat_title);
 		$query->execute();
-		$result=$query->get_result();
-		if ($result) {
-	 	echo "Success---";
-		 }else{
-		 	echo "Huh?";
-	 			}
-	 		}
-	 			// header("location:category.php");
-	
+		header("location:category.php");
+	}
 }
 	?>
 
@@ -82,15 +75,7 @@
 			$cat_id=$row['cat_id'];
 			$cat_title=$row['cat_title'];
 
-		}
-
-		if ($result) {
-	 	echo "";
-	
-		 }else{
-		 	echo "Huh?";die();
-	 			}
-	 			
+		} 			
 	 		?>				<br><br>
 	 						<div class='input-group'>
                             <input type="text" class="form-control" name="txt_edit" placeholder="<?php echo htmlspecialchars($cat_title);?>">
@@ -110,16 +95,9 @@
 			echo "Type category name";
 		}else{
 		$query=$con->prepare("UPDATE category SET cat_title=? WHERE cat_id=?");
-		$query->bind_param("ss",$cat_title,$cat_id)
-		$query->execute()
-		$result=$query->get_result();
-		if ($result) {
-	 	echo "oK";
-		 }else{
-		 	echo "Huh?.";
-	 			}
-	 			header("location:category.php");
-
+		$query->bind_param("ss",$cat_title,$cat_id);
+		$query->execute();
+	 	header("location:category.php");
 	}
 }
 	?>
@@ -142,7 +120,7 @@
 						    </tr>
 						    <?php
 								 $query=$con->prepare("SELECT * FROM category");
-								 $query->execute()
+								 $query->execute();
 								 $result=$query->get_result();
 								 while($row=$result->fetch_assoc())
 								 {
@@ -152,7 +130,7 @@
 							?>
 							<tr>
 						        <td><?php echo htmlspecialchars($cat_id); ?></td>
-						        <td><?php echo htmlspecialchars($cat_title); ?></td>
+						        <td><?php echo ucwords(htmlspecialchars($cat_title)); ?></td>
 						        <td>
 						        	<a href="category.php?edit=<?php echo htmlspecialchars($cat_id); ?>" class="btn glyphicon glyphicon-edit"></a>
 						        	<a href="category.php?delete=<?php echo htmlspecialchars($cat_id);?>" class="btn glyphicon glyphicon-trash"></a>

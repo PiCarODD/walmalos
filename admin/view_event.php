@@ -99,7 +99,6 @@
 		$query=$con->prepare("DELETE FROM event WHERE event_id=?");
 		$query->bind_param("s",$event_id);
 		$query->execute();
-		$result=$query->get_result();
 		header("location:view_event.php");
 
 	}

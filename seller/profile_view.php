@@ -12,8 +12,8 @@
 					</nav>
 				</div>
 				<div class="panel-body">
-					<div class="col-md-2 profile " style="background-color: #337AB7;">
-						<div class="col-md-offset-2">
+					<div class="col-md-2 profile-sidebar " style="background-color: #337AB7;">
+						<div class="col-md-offset-2 profile-userpic">
 							<!-- <img src="img/girl2.jpg" width="100px" height="100px"  class="img img-circle" alt=""> -->
 							<img src="../userimgs/<?php echo $_SESSION['user_image'] ?>" width="100px" height="100px"  class="img img-circle" alt="">
 						</div>
@@ -29,11 +29,6 @@
 								$query->bind_param("s",$user_id);
 								$query->execute();
 								$res=$query->get_result();
-								if(!$res)
-								{
-									die("Huh?");
-								}
-
 								$total_product=0;
 								$order_product=0;
 								$income=0;

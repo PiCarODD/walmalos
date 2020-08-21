@@ -37,11 +37,7 @@
 	        $delete_query = $con->prepare("DELETE FROM product WHERE product_id =?");
 	        $delete_query->bind_param("s",$product_id);
 	        $delete_query->execute();
-;	        $delete_result = $delete_query->get_result();
-
-	        if(!$delete_result){
-	            die('Huh?');
-	        }
+	        $delete_result = $delete_query->get_result();
         }
             
     ?>
@@ -108,7 +104,7 @@
                     $count=ceil($product_count/3);
                
 					$query =$con->prepare("SELECT * FROM product WHERE product_seller_id=? ORDER BY product_id DESC LIMIT ?,?");
-					$query->bind_param("sss",$user_id,$page_start,$per_page);
+					$query->bind_param("iss",$user_id,$page_start,$per_page);
 					$query->execute();
                     $result=$query->get_result();
                      if(!$result){

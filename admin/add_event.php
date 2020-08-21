@@ -98,14 +98,6 @@
 		$query=$con->prepare("INSERT INTO event(event_name, description, start_date, end_date, location, comment) VALUES (?,?,?,?,?,?)");
 		$query->bind_param("ssssss",$event_name,$event_description,$event_start_date,$event_location,$comment);
 		$query->execute();
-		$result=$query->get_result();
-		if ($result) {
-	 	echo "Success---";
-		 }else{
-		 	echo "Huh?";
-	 			}
-	 		}
-	 			// header("location:category.php");
-	
-
-	?>
+		header("location:add_event.php");
+	}
+?>

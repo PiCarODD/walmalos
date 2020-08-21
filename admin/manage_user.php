@@ -83,15 +83,11 @@
 								<td><img src="../images/<?php echo htmlspecialchars($user_image) ?>" class="img-circle" width="100px" height="100px"></td>
 								<?php 
 									$seller_query=$con->prepare("SELECT * FROM product WHERE product_seller_id=?");
-									$seller_query->bind_param("s",$user_id)
+									$seller_query->bind_param("s",$user_id);
 									$seller_result=$seller_query->get_result();
-									if(!$seller_result)
-									{
-										die("Seller query fail");
-									}
 									$total_qty=0;
 									$total_selling_price=0;
-									while ($seller_row=$seller_result->fetch_assoc()) 
+									while ($seller_result != "" && $seller_row=$seller_result->fetch_assoc()) 
 									{
 										$total_qty+=$seller_row['product_qty'];
 										$total_selling_price+=$seller_row['product_qty']*$seller_row['product_price'];
@@ -127,7 +123,7 @@
 		$user_id=$_GET['delete'];
 		$query=$con->prepare("DELETE FROM user WHERE user_id=?");
 		$query->bind_param("s",$user_id);
-		$query->execute()
+		$query->execute();
 		$result=$query->get_result();
 
 		$seller_delete_query=$con->prepare("DELETE FROM product WHERE product_seller_id=?");

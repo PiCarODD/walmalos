@@ -8,7 +8,7 @@
             $qty=$_SESSION['qty'][$key];
             $total=$_SESSION['total'][$key];
             $cart_query=$con->prepare("INSERT INTO cart(cart_product_id, cart_customer_id, cart_date, cart_qty, cart_total_price) VALUES (?, ?, now(), ?, ?)");
-            $cart_query->bind_param("ssss",$value,$customer_id,$qty,$total);
+            $cart_query->bind_param("iiii",$value,$customer_id,$qty,$total);
             $cart_query->execute();
             $cart_result=$cart_query->get_result();
             if (!$cart_result) 
@@ -25,23 +25,14 @@
             if(($product_qty-$qty)>=0)
             {
                 $remove_qty_query=$con->prepare("UPDATE product SET product_qty=product_qty-$qty WHERE product_id=?");
-                $remove_qty_query->bind_param("s",$value);
+                $remove_qty_query->bind_param("i",$value);
                 $remove_qty_query->execute();
                 $remove_qty_result=$remove_qty_query->get_result();
-                if (!$remove_qty_result) 
-                {
-                  die("Insert customer fail");
-                }
                 if(($product_qty-$qty)==0)
                 {
                   $product_delete_query=$con->prepare("DELETE FROM product WHERE product_id=?");
-                  $product_delete_query -> bind_param("s",$value);
+                  $product_delete_query -> bind_param("i",$value);
                   $product_delete_query->execute();
-                  $product_delete_result=$product_delete_query->get_result();
-                  if (!$product_delete_result) 
-                  {
-                    die("Insert customer fail");
-                  }
                   unset($_SESSION['cart_product_array'][$key]);
                   header("Location:cart_view.php");
                 }

@@ -34,7 +34,7 @@ New Products
 					<a class="zoomTool" href="product_details.php?productd=<?php echo htmlspecialchars($product_id) ?>" title="add to cart"><span class="icon-search"></span> QUICK VIEW</a>
 					<a href="product_details.php?productd=<?php echo htmlspecialchars($product_id); ?>"><img class="img-responsive"  style="height: 250px;" src="images/<?php echo htmlspecialchars($product_image); ?>" alt=""></a>
 					<div class="caption cntr">
-						<p><?php echo htmlspecialchars($product_title); ?></p>
+						<p><?php echo ucwords(htmlspecialchars($product_title)); ?></p>
 						<p><strong> <?php echo htmlspecialchars($product_price); ?></strong></p>
 						<!-- <h4><a class="shopBtn" href="view_product.php?cart=<?php echo $product_id; ?>" title="add to cart"> Add to cart </a></h4> -->
 						<h4><a class="shopBtn" href="cart_view.php?cart_product_id=<?php echo htmlspecialchars($product_id); ?>" title="add to cart"> Add to cart </a></h4>

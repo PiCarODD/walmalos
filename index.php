@@ -60,7 +60,7 @@ New Products
 					<div class="item active">
 						<ul class="thumbnails" style="list-style: none;">
 							<?php 
-							$stmt = $con->prepare("SELECT * FROM product ORDER BY product_id DESC LIMIT 12");
+							$stmt = $con->prepare("SELECT * FROM product WHERE product_status='approved' ORDER BY product_id DESC LIMIT 12");
 							$stmt -> execute();
 							$result = $stmt->get_result();
 

@@ -79,14 +79,14 @@
 										<?php
 											$user_query=$con->prepare("SELECT * FROM user WHERE user_id=? ");
 											$user_query->bind_param("i",$product_seller_id);
-											$user_query->execute()
+											$user_query->execute();
 											$user_result=$user_query->get_result();
 											while($row=$user_result->fetch_assoc())
 											{
 											 	$product_seller_name=$row['username'];
 											}
 										 ?>
-										<td><?php echo htmlspecialchars($product_seller_name); ?></td>
+										<td><?php if($product_seller_name==""){echo "No seller";}else{echo htmlspecialchars($product_seller_name);} ?></td>
 
 										<!-- <td><?php echo $product_status; ?><a value="<?php echo $product_status; ?>"></a></td> -->
 										<td><a href="edit_product.php?product_id=<?php echo htmlspecialchars($product_id); ?>" class="btn glyphicon glyphicon-edit"></a>
@@ -108,12 +108,6 @@
 				        $delete_query = $con->prepare("DELETE FROM product WHERE product_id =?");
 				        $delete_query->bind_param("s",$product_id);
 				        $delete_query->execute();
-				        $delete_result = $delete_query->get_result();
-
-				        if(!$delete_result){
-				            die('Query Failed');
-				        }
-
 				        header('Location:product.php');
 			        }
 			            

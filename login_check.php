@@ -34,9 +34,6 @@
 			$query->bind_param("s",$email);
 			$query->execute();
 			$result = $query->get_result();
-			if(!$result){
-				die("Query failed");
-			}
 			while ($row=$result->fetch_assoc()) {
 				$db_id = $row['user_id'];
 				$db_username=$row['username'];
